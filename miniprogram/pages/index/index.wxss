@@ -1,24 +1,32 @@
-/**index.wxss**/
-.userinfo {
+.map {
+  height: 100vh;
+  width: 100vw;
+}
+
+.icon-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #aaa;
+  justify-content: space-between;
+  width: 87rpx;
+  margin-top: 30rpx;
+  height: 136rpx;
+  opacity: .6;
 }
 
-.userinfo-avatar {
-  overflow: hidden;
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
+.icon-container cover-image {
+  height: 60rpx;
+  width: 60rpx;
 }
 
-.usermotto {
-  margin-top: 200px;
-}
-
-.item.cu-avatar.xl.radius {
-  margin-top: 100rpx;
-  width: unset;
+.btn-container {
+  width: 600rpx;
+  height: 70rpx;
+  margin-left: 75rpx;
+  position: absolute;
+  bottom: 7%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: .7;
 }

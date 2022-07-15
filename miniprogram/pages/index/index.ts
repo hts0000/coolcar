@@ -1,52 +1,67 @@
-// index.ts
-// 获取应用实例
-const app = getApp<IAppOption>()
-
 Page({
   data: {
-    motto: 'Hello World',
-    userInfo: {},
-    hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    canIUseGetUserProfile: false,
-    canIUseOpenData: wx.canIUse('open-data.type.userAvatarUrl') && wx.canIUse('open-data.type.userNickName'), // 如需尝试获取用户信息可改为false
-    val: {
-      name: "hts0000",
+    setting: {
+      skew: 0,
+      rotate: 0,
+      showLocation: true, // 展示当前位置
+      showScale: true,  // 显示比例尺
+      subKey: '',
+      layerStyle: -1,
+      enableZoom: true,
+      enableScrool: true,
+      enableRotate: false,
+      showCompass: false,
+      enable3D: false,
+      enableOverlooking: false,
+      enbaleSatellite: false,
+      enableTraffic: false,
     },
+    location: {
+      latitude: 23.099994,
+      longitude: 113.324520,
+    },
+    scale: 10,
+    markers: [  // 叠在map上的元素
+      {
+        iconPath: "/resources/car.png",
+        id: 0,
+        latitude: 23.099994,
+        longitude: 113.324520,
+        width: 50,
+        height: 50,
+      },
+      {
+        iconPath: "/resources/car.png",
+        id: 1,
+        latitude: 23.09995,
+        longitude: 113.324520,
+        width: 50,
+        height: 50,
+      },
+    ],
   },
-  // 事件处理函数
-  bindViewTap() {
-    wx.navigateTo({
-      url: '../logs/logs',
-    })
-  },
-  onLoad() {
-    // @ts-ignore
-    if (wx.getUserProfile) {
-      this.setData({
-        canIUseGetUserProfile: true
-      })
-    }
-  },
-  getUserProfile() {
-    // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认，开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
-    wx.getUserProfile({
-      desc: '展示用户信息', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-      success: (res) => {
-        console.log(res)
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
+  // 点击定位图标，将定位移动到当前位置
+  onMyLocationTap: function () {
+    // 获取当前位置的函数，传入是一个对象
+    wx.getLocation({
+      type: "gcj02",
+      success: res => { // 函数执行成功的回调，res是成功回调后返回的数据
+        this.setData({  // 成功回调后修改全局变量中的位置信息
+          location: {
+            latitude: res.latitude,
+            longitude: res.longitude,
+          },
         })
-      }
+      },
+      fail: () => { // 失败的回调
+        wx.showToast({  // showToast会弹出一个窗口，显示内容提示用户
+          title: '请在设置中打开地理位置授权',
+          icon: 'none',
+          duration: 2000
+        })
+      },
     })
   },
-  getUserInfo(e: any) {
-    // 不推荐使用getUserInfo获取用户信息，预计自2021年4月13日起，getUserInfo将不再弹出弹窗，并直接返回匿名的用户个人信息
-    console.log(e)
-    this.setData({
-      userInfo: e.detail.userInfo,
-      hasUserInfo: true
-    })
-  }
+  onLoad: function () {
+  },
 })
