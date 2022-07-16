@@ -14,8 +14,8 @@
       <cover-image src="/resources/account.png"></cover-image>
       <cover-image bindtap="onMyLocationTap" src="/resources/my_location.png"></cover-image>
     </cover-view>
-
-    <cover-view class="btn-container bg-grey round">
+    <!-- 元素绑定移动markers的函数 -->
+    <cover-view class="btn-container bg-grey round" bindtap="moveCars">
       <cover-view>扫码租车</cover-view>
     </cover-view>
   </map>

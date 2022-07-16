@@ -1,4 +1,6 @@
 Page({
+  // 当页面隐藏时，后台数据不再更新
+  isPageShowing: false,
   data: {
     setting: {
       skew: 0,
@@ -20,7 +22,7 @@ Page({
       latitude: 23.099994,
       longitude: 113.324520,
     },
-    scale: 10,
+    scale: 10,  // 3~20，缩放比例，3最大缩放
     markers: [  // 叠在map上的元素
       {
         iconPath: "/resources/car.png",
@@ -62,6 +64,45 @@ Page({
       },
     })
   },
+  // 移动车辆测试
+  moveCars: function () {
+    const dest = {
+      latitude: 23.099994,
+      longitude: 113.324520,
+    }
+    // 根据map元素id选中map，获取map对象进行操作
+    const map = wx.createMapContext("mapId")
+    const moveCar = () => {
+      dest.latitude += 0.1
+      dest.longitude += 0.1
+      map.translateMarker({
+        markerId: 0,
+        // 移动到哪个位置上
+        destination: {
+          latitude: dest.latitude,
+          longitude: dest.longitude,
+        },
+        autoRotate: false,
+        rotate: 0,
+        // 动画时间，用5秒的时间来移动，0的话就是瞬移了
+        // 这个值不是定死的，尽量在指定时间内移动，可能距离太短一下就结束了
+        duration: 5000,
+        animationEnd: () => {
+          // 页面未隐藏时，位置才更新
+          if (this.isPageShowing) {
+            moveCar()
+          }
+        }
+      })
+    }
+    moveCar()
+  },
   onLoad: function () {
+  },
+  onShow() {
+    this.isPageShowing = true
+  },
+  onHide() {
+    this.isPageShowing = false
   },
 })
