@@ -1,7 +1,3 @@
-.container {
-    padding-top: 60rpx;
-}
-
 .lic-tmpl {
     position: relative;
     width: 600rpx;
@@ -11,9 +7,12 @@
     justify-content: center;
 }
 
-.lic-tmpl-img {
+.stretch {
     width: 100%;
     height: 100%;
+}
+
+.lic-tmpl-img {
     position: absolute;
     opacity: .4;
 }
@@ -25,4 +24,9 @@
 .lic-content {
     position: absolute;
     bottom: -70rpx;
+}
+
+/* 自动计算表单各个标题长度，对齐 */
+.cu-form-group .title {
+    min-width: calc(4em + 30rpx);
 }

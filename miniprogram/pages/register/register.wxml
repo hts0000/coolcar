@@ -1,7 +1,54 @@
-<view class="container">
-  <view class="lic-tmpl" wx:if="{{!hasLicImg}}" bindtap="onUploadLic">
-    <image class="lic-tmpl-img" src="/resources/lic.png" />
+<view class="container padding-top-xl">
+  <!-- 当licImgURL为空时进入 -->
+  <view class="lic-tmpl" wx:if="{{!licImgURL}}" bindtap="onUploadLic">
+    <image class="lic-tmpl-img stretch" src="/resources/lic.png" />
     <view class="cuIcon-camerafill lg text-gray"></view>
     <view class="lic-content">请上传驾驶证照片</view>
   </view>
+  <!-- 当licImgURL不为空时进入 -->
+  <block wx:else>
+    <!-- 显示上传的图片 -->
+    <view class="lic-tmpl">
+      <image class="stretch" src="{{licImgURL}}" />
+    </view>
+
+    <!-- 表单数据 -->
+    <view class="lic-form margin-top-xl">
+      <view class="cu-form-group">
+        <view class="title">驾驶证号</view>
+        <input placeholder="驾驶证号" value="{{licNo}}" />
+      </view>
+
+      <view class="cu-form-group">
+        <view class="title">姓名</view>
+        <input placeholder="姓名" value="{{name}}" />
+      </view>
+
+      <view class="cu-form-group">
+        <view class="title">性别</view>
+        <!-- 从range中选择下标为genderIndex的内容显示 -->
+        <picker bindchange="onGenderChange" value="{{genderIndex}}" range="{{genders}}">
+          <view class="picker">
+            {{genders[genderIndex]}}
+          </view>
+        </picker>
+      </view>
+
+      <view class="cu-form-group">
+        <view class="title">出生日期</view>
+        <picker
+          mode="date"
+          value="{{birthday}}"
+          start="1910-01-01"
+          end="2022-01-01"
+          bindchange="onBirthdayChange"
+        >
+          <view class="picker">
+            {{birthday}}
+          </view>
+        </picker>
+      </view>
+    </view>
+    <button class="cu-btn bg-red lg margin-top-xl">递交审查</button>
+  </block>
 </view>
