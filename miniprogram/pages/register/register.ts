@@ -9,8 +9,9 @@ Page({
     name: '',
     genderIndex: 0,
     genders: ['未知', '男', '女', '其他'],
-    licImgURL: undefined as string | undefined,
+    licImgURL: '',
     birthday: '1999-01-01',
+    state: 'UNSUBMITTED' as 'UNSUBMITTED' | 'PENDING' | 'VERIFIED',
   },
 
   // 上传驾驶证实现
@@ -49,6 +50,31 @@ Page({
   onBirthdayChange(e: any) {
     this.setData({
       birthday: e.detail.value,
+    })
+  },
+
+  // 上传驾驶证照片至服务器端
+  onSubmit() {
+    // TODE: 上传信息至服务端，等待后端返回数据
+    // 未返回期间是PENDING状态，返回成功是VERIFIED状态
+    this.setData({
+      state: 'PENDING',
+    })
+    setTimeout(this.onLicVerified, 3000)
+  },
+
+  // 清掉之前表单的数据，让用户可以重新上传
+  onReSubmit() {
+    this.setData({
+      state: 'UNSUBMITTED',
+      licImgURL: '',
+    })
+  },
+
+  // 修改驾驶证认证状态
+  onLicVerified() {
+    this.setData({
+      state: 'VERIFIED',
     })
   },
 
