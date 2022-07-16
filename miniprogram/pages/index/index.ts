@@ -43,7 +43,7 @@ Page({
     ],
   },
   // 点击定位图标，将定位移动到当前位置
-  onMyLocationTap: function () {
+  onMyLocationTap() {
     // 获取当前位置的函数，传入是一个对象
     wx.getLocation({
       type: "gcj02",
@@ -65,7 +65,7 @@ Page({
     })
   },
   // 移动车辆测试
-  moveCars: function () {
+  moveCars() {
     const dest = {
       latitude: 23.099994,
       longitude: 113.324520,
@@ -97,7 +97,18 @@ Page({
     }
     moveCar()
   },
-  onLoad: function () {
+  // 扫码租车按钮实现
+  onScanClicked() {
+    wx.scanCode({
+      success: () => {
+        wx.navigateTo({
+          url: "/pages/register/register",
+        })
+      },
+      fail: console.error
+    })
+  },
+  onLoad() {
   },
   onShow() {
     this.isPageShowing = true
