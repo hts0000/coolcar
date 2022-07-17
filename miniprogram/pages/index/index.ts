@@ -101,6 +101,7 @@ Page({
   onScanClicked() {
     wx.scanCode({
       success: () => {
+        // navigateTo跳转至新页面，当前页面会保留，可退回
         wx.navigateTo({
           url: "/pages/register/register",
         })

@@ -1,0 +1,43 @@
+<view class="container">
+  <view class="static">
+    <!-- 图片比例要根据原始图片尺寸来缩放，不然会变形 -->
+    <!-- 比如原始sedan图片原始比例为512*307，如果需要显示width为600rpx，-->
+    <!-- 600/512=1.17得到宽度比例，则height为307*1.17约等于360rpx -->
+    <image class="static-img" src="/resources/sedan.png" />
+
+    <view>
+      驾驶安全是用户的责任
+    </view>
+    <view>
+      请将车辆停放在停车位内
+    </view>
+  </view>
+
+  <view class="avatar-container">
+    <!-- open-type="getUserProfile"询问用户获取地理位置、头像、用户名等信息； 这个是微信加上的功能-->
+    <!-- 没获取到了用户信息时，展示原始头像框 -->
+    <button
+      wx:if="{{!hasUserInfo}}"
+      class="cu-avatar round lg bg-grey margin-xs"
+      bindtap="getUserProfile"
+    >
+      <text class="cuIcon-people"></text>
+    </button>
+    <view wx:if="{{!hasUserInfo}}" class="margin-top">
+      实时展示我的头像
+    </view>
+
+    <!-- 获取到了用户信息时，展示用户头像框 -->
+    <view class="switch-container" wx:if="{{hasUserInfo}}">
+      <image class="cu-avatar round lg bg-grey margin-xs" src="{{userInfo.avatarUrl}}" />
+      <switch bindchange="onShareLocation" checked="{{isShareLocation}}"></switch>
+    </view>
+    <view wx:if="{{hasUserInfo}}" class="margin-top">
+      {{userInfo.nickName}}
+    </view>
+  </view>
+
+  <button class="unlock-btn cu-btn bg-grey lg">
+    立即开锁
+  </button>
+</view>

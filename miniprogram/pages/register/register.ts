@@ -76,6 +76,10 @@ Page({
     this.setData({
       state: 'VERIFIED',
     })
+    // redirectTo跳转至新页面，不会保留当前页面，不可退回
+    wx.redirectTo({
+      url: '/pages/lock/lock',
+    })
   },
 
   /**
