@@ -17,6 +17,7 @@ Page({
       enableOverlooking: false,
       enbaleSatellite: false,
       enableTraffic: false,
+      avatarURL: '' as string | undefined,
     },
     location: {
       latitude: 23.099994,
@@ -42,6 +43,7 @@ Page({
       },
     ],
   },
+
   // 点击定位图标，将定位移动到当前位置
   onMyLocationTap() {
     // 获取当前位置的函数，传入是一个对象
@@ -64,6 +66,7 @@ Page({
       },
     })
   },
+
   // 移动车辆测试
   moveCars() {
     const dest = {
@@ -97,6 +100,7 @@ Page({
     }
     moveCar()
   },
+
   // 扫码租车按钮实现
   onScanClicked() {
     wx.scanCode({
@@ -109,11 +113,21 @@ Page({
       fail: console.error
     })
   },
+
   onLoad() {
+    // BUG: 没有正确处理用户头像显示，lock页面获取到用户信息后传递不到index页面
+    // 第一次获取用户信息在lock页面
+    const userInfo = getApp<IAppOption>().globalData.userInfo
+    console.log("onLoad", userInfo)
+    this.setData({
+      avatarURL: userInfo?.avatarUrl || '',
+    })
   },
+
   onShow() {
     this.isPageShowing = true
   },
+
   onHide() {
     this.isPageShowing = false
   },

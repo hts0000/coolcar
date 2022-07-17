@@ -2,7 +2,6 @@ const shareLocationKey = 'is_share_location'
 
 // pages/lock/lock.ts
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -21,6 +20,8 @@ Page({
       desc: '用于实时展示头像', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
       success: (res) => {
         // console.log("res", res)
+        // 要自己把userInfo存下来
+        getApp<IAppOption>().globalData.userInfo = res.userInfo
         this.setData({
           userInfo: res.userInfo,
           hasUserInfo: true
@@ -42,9 +43,12 @@ Page({
    */
   onLoad() {
     // 每次打开小程序时，就去获取是否分享行程这个值
-    // 如果没有这个值，则默认设置为false
+    // 如果没有这个值，则默认设置为true
+    // 有则取本地值
+    const isShare: boolean | '' = wx.getStorageSync(shareLocationKey) // 取不到值是''
+    console.log("onLoad", isShare)
     this.setData({
-      isShareLocation: wx.getStorageSync(shareLocationKey) || false,
+      isShareLocation: isShare === '' ? true : isShare,
     })
   },
 
