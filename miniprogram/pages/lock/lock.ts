@@ -40,18 +40,41 @@ Page({
 
   // 前往行程页面
   onUnlockTap() {
-    // 显示一个开锁中提示
-    wx.showLoading({
-      title: '开锁中',
-      // 为页面覆盖一个透明的罩子，避免开锁中时点击到其他元素
-      mask: true,
+    // 获取位置信息权限，为后续行程页面做准备
+    wx.getLocation({
+      type: 'gcj02',
+      success: loc => {
+        // TODO: 向后端传输数据
+        console.log('starting a trip', {
+          location: {
+            latitude: loc.latitude,
+            longitude: loc.longitude,
+          },
+          // TODO: 需要数据的双向绑定
+          avatarURL: this.data.isShareLocation ? this.data.userInfo.avatarUrl : '',
+          carID: '123456',
+        })
+        // 显示一个开锁中提示
+        wx.showLoading({
+          title: '开锁中',
+          // 为页面覆盖一个透明的罩子，避免开锁中时点击到其他元素
+          mask: true,
+        })
+        // 模拟汽车开锁等待时间
+        setTimeout(() => {
+          wx.redirectTo({
+            url: '/pages/driving/driving',
+          })
+        }, 3000)
+      },
+      fail: () => { // 失败的回调
+        wx.showToast({  // showToast会弹出一个窗口，显示内容提示用户
+          title: '请在设置中打开地理位置授权',
+          icon: 'none',
+          duration: 2000
+        })
+      },
     })
-    // 模拟汽车开锁等待时间
-    setTimeout(() => {
-      wx.redirectTo({
-        url: '/pages/driving/driving',
-      })
-    }, 3000)
   },
 
   /**
