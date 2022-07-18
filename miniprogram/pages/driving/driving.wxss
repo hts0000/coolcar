@@ -1,0 +1,39 @@
+page {
+    height: 100%;
+}
+
+.container {
+    flex-direction: column-reverse;
+    height: 100%;
+}
+
+.map {
+    width: 100%;
+    flex-grow: 1;
+}
+
+.driving-bar {
+    height: 325rpx;
+    width: 100%;
+}
+
+.time-bar {
+    display: flex;
+    flex-direction: row;
+    bottom: 0;
+    margin-bottom: 30rpx;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-size {
+    font-size: 68rpx;
+}
+
+.icon-time {
+    color: orange;
+}
+
+.driving-btn.cu-btn.bg-red {
+    width: 80%;
+}

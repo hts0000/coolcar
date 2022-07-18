@@ -38,6 +38,22 @@ Page({
     wx.setStorageSync(shareLocationKey, isShareLocation)
   },
 
+  // 前往行程页面
+  onUnlockTap() {
+    // 显示一个开锁中提示
+    wx.showLoading({
+      title: '开锁中',
+      // 为页面覆盖一个透明的罩子，避免开锁中时点击到其他元素
+      mask: true,
+    })
+    // 模拟汽车开锁等待时间
+    setTimeout(() => {
+      wx.redirectTo({
+        url: '/pages/driving/driving',
+      })
+    }, 3000)
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */

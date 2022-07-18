@@ -1,0 +1,21 @@
+<view class="container">
+  <view class="driving-bar bg-grey text-center light">
+    <view class="time-bar">
+      <view
+        class="margin-right margin-top text-size icon-time text-black text-bold cuIcon-timefill lg text-gray"
+      ></view>
+      <view class="margin-top text-size text-black text-bold">{{drivingTime}}</view>
+    </view>
+    <view class="fare-text text-bold">费用：{{fare}}元</view>
+    <button class="driving-btn cu-btn bg-red margin-tb-sm lg">结束行程</button>
+  </view>
+  <map
+    id="mapId"
+    class="map"
+    latitude="{{location.latitude}}"
+    longitude="{{location.longitude}}"
+    show-location
+    scale="{{scale}}"
+  >
+  </map>
+</view>

@@ -37,7 +37,7 @@
     </view>
   </view>
 
-  <button class="unlock-btn cu-btn bg-grey lg">
+  <button class="unlock-btn cu-btn bg-grey lg" bindtap="onUnlockTap">
     立即开锁
   </button>
 </view>
