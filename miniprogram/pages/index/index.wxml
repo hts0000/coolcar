@@ -11,9 +11,11 @@
     markers="{{markers}}"
   >
     <cover-view class="icon-container">
-      <cover-image wx:if="{{!avatarURL}}" src="/resources/account.png"></cover-image>
-      <!-- BUG: 用户授予权限之后仍然不显示 -->
-      <cover-image class="round" wx:if="{{avatarURL}}" src="{{avatarURL}}"></cover-image>
+      <cover-image
+        clas="round"
+        src="{{avatarURL?avatarURL:'/resources/account.png'}}"
+        bindtap="onMyTripsTap"
+      ></cover-image>
       <cover-image bindtap="onMyLocationTap" src="/resources/my_location.png"></cover-image>
     </cover-view>
     <cover-view class="btn-container bg-grey round" bindtap="onScanClicked">

@@ -1,0 +1,20 @@
+swiper {
+    width: 750rpx;
+    height: 306rpx;
+}
+
+.swiper-image {
+    height: 100%;
+    width: 100%;
+}
+
+.avatar-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.avatar-img {
+    height: 60rpx;
+    width: 60rpx;
+}

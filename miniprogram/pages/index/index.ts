@@ -17,8 +17,8 @@ Page({
       enableOverlooking: false,
       enbaleSatellite: false,
       enableTraffic: false,
-      avatarURL: '' as string | undefined,
     },
+    avatarURL: '' as string | undefined,
     location: {
       latitude: 23.099994,
       longitude: 113.324520,
@@ -114,18 +114,26 @@ Page({
     })
   },
 
-  onLoad() {
-    // BUG: 没有正确处理用户头像显示，lock页面获取到用户信息后传递不到index页面
-    // 第一次获取用户信息在lock页面
-    const userInfo = getApp<IAppOption>().globalData.userInfo
-    console.log("onLoad", userInfo)
-    this.setData({
-      avatarURL: userInfo?.avatarUrl || '',
+  // 点击头像前往个人页面
+  onMyTripsTap() {
+    wx.navigateTo({
+      url: '/pages/mytrips/mytrips',
     })
+  },
+
+  onLoad() {
   },
 
   onShow() {
     this.isPageShowing = true
+    // 第一次获取用户信息在lock页面
+    console.log("onShow", getApp<IAppOption>().globalData.userInfo)
+    if (!this.data.avatarURL) {
+      const userInfo = getApp<IAppOption>().globalData.userInfo
+      this.setData({
+        avatarURL: userInfo?.avatarUrl || '',
+      })
+    }
   },
 
   onHide() {

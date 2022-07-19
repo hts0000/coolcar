@@ -42,7 +42,7 @@ Page({
       fail: console.error
     })
     wx.onLocationChange(loc => {
-      console.log(loc)
+      console.log("driving", loc)
       this.setData({
         location: {
           latitude: loc.latitude,

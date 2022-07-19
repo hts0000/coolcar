@@ -22,6 +22,7 @@ Page({
         // console.log("res", res)
         // 要自己把userInfo存下来
         getApp<IAppOption>().globalData.userInfo = res.userInfo
+        console.log(getApp<IAppOption>().globalData.userInfo)
         this.setData({
           userInfo: res.userInfo,
           hasUserInfo: true
