@@ -1,3 +1,5 @@
+import { routing } from "../../utils/routing"
+
 // pages/mytrips/mytrips.ts
 Page({
 
@@ -73,7 +75,7 @@ Page({
 
   onRegisterTap() {
     wx.navigateTo({
-      url: '/pages/register/register'
+      url: routing.register(),
     })
   },
 

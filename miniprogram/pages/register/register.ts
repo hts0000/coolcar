@@ -1,3 +1,5 @@
+import { routing } from "../../utils/routing"
+
 // pages/register/register.ts
 Page({
 
@@ -90,8 +92,9 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(opt) {
-    if (opt.redirectURL) {
+  onLoad(opt: Record<'redirectURL', string>) {
+    const o: routing.RegisterOpts = opt
+    if (o.redirectURL) {
       this.redirectURL = decodeURIComponent(opt.redirectURL)
     }
   },

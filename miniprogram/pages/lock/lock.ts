@@ -1,3 +1,5 @@
+import { routing } from "../../utils/routing"
+
 const shareLocationKey = 'is_share_location'
 
 // pages/lock/lock.ts
@@ -67,7 +69,12 @@ Page({
         // 模拟汽车开锁等待时间
         setTimeout(() => {
           wx.redirectTo({
-            url: `/pages/driving/driving?trip_id=${tripID}`,
+            url: routing.driving({
+              tripID: tripID,
+            }),
+            complete: () => {
+              wx.hideLoading()
+            },
           })
         }, 3000)
       },
@@ -84,8 +91,9 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(opt) {
-    console.log("unlocking car", opt.car_id)
+  onLoad(opt: Record<'carID', string>) {
+    const o: routing.LockOpts = opt
+    console.log("unlocking car", o.carID)
     // 每次打开小程序时，就去获取是否分享行程这个值
     // 如果没有这个值，则默认设置为true
     // 有则取本地值

@@ -1,3 +1,5 @@
+import { routing } from "../../utils/routing"
+
 // 每秒钟0.7分钱
 const centsPerSec = 0.7
 
@@ -68,8 +70,9 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(opt) {
-    console.log('current trip', opt.trip_id)
+  onLoad(opt: Record<'tripID', string>) {
+    const o: routing.DrivingOpts = opt
+    console.log('current trip', o.tripID)
     this.setupLocationUpdator()
     this.setupTimer()
   },
