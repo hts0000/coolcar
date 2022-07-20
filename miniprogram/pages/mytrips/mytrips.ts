@@ -1,5 +1,15 @@
 import { routing } from "../../utils/routing"
 
+interface Trip {
+  id: string
+  start: string
+  end: string
+  duration: string
+  fee: string
+  distance: string
+  status: string
+}
+
 // pages/mytrips/mytrips.ts
 Page({
 
@@ -38,6 +48,8 @@ Page({
         promotionID: 4
       },
     ],
+    trips: [] as Trip[],
+    tripsHeight: 0,
   },
 
   onSwiperChange(e: any) {
@@ -79,18 +91,47 @@ Page({
     })
   },
 
+  populateTrips() {
+    const trips: Trip[] = []
+    for (let i = 0; i < 100; i++) {
+      trips.push({
+        id: (1001 + i).toString(),
+        start: '平安大厦',
+        end: '腾讯大厦',
+        duration: '00时38分40秒',
+        fee: '128.00元',
+        distance: '12.1km',
+        status: '已完成',
+      })
+    }
+    this.setData({
+      trips: trips,
+    })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad() {
-
+    // 为垂直滚动栏加载模拟数据
+    this.populateTrips()
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady() {
-
+    // 根据实际机型长宽来设置垂直滚动栏的高度
+    // createSelectorQuery: 类似于jQuery根据id或class获取页面元素
+    //    然后对这个元素建立一个查询请求
+    //    查询成功后执行回调（rect中包含了该元素的各种信息，包括该元素在页面中实际占据的长宽）
+    // getSystemInfoSync: 获取当前机型的数据，如型号、系统版本、窗口高度等
+    wx.createSelectorQuery().select('#heading').boundingClientRect(rect => {
+      this.setData({
+        // 当前机型窗口高度减去固定元素高度，剩下高度就是垂直滚动栏的高度
+        tripsHeight: wx.getSystemInfoSync().windowHeight - rect.height
+      })
+    }).exec() // 实际执行boundingClientRect获取该元素信息
   },
 
   /**

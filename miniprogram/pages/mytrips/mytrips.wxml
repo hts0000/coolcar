@@ -1,35 +1,79 @@
 <!-- 图片轮播组件 -->
-<swiper
-  indicator-dots="{{indicatorDots}}"
-  autoplay="{{autoPlay}}"
-  interval="{{interval}}"
-  duration="{{duration}}"
-  circular="{{circular}}"
-  display-multiple-items="{{multiItemCount}}"
-  previous-margin="{{prevMargin}}"
-  next-margin="{{nextMargin}}"
-  vertical="{{vertical}}"
-  current="{{current}}"
-  bindchange="onSwiperChange"
->
-  <!-- data-[NAME]="{{VALUE}}"是微信指定的一种格式，用于将NAME:VALUE以键值对的形式返回给js -->
-  <swiper-item
-    wx:for="{{promotionItems}}"
-    wx:key="promotionID"
-    bindtap="onPromotionItemTap"
-    data-promotion-id="{{item.promotionID}}"
+<view id="heading" class="padding-bottom">
+  <swiper
+    indicator-dots="{{indicatorDots}}"
+    autoplay="{{autoPlay}}"
+    interval="{{interval}}"
+    duration="{{duration}}"
+    circular="{{circular}}"
+    display-multiple-items="{{multiItemCount}}"
+    previous-margin="{{prevMargin}}"
+    next-margin="{{nextMargin}}"
+    vertical="{{vertical}}"
+    current="{{current}}"
+    bindchange="onSwiperChange"
   >
-    <image class="swiper-image" src="{{item.img}}" />
-  </swiper-item>
-</swiper>
+    <!-- data-[NAME]="{{VALUE}}"是微信指定的一种格式，用于将NAME:VALUE以键值对的形式返回给js -->
+    <swiper-item
+      wx:for="{{promotionItems}}"
+      wx:key="promotionID"
+      bindtap="onPromotionItemTap"
+      data-promotion-id="{{item.promotionID}}"
+    >
+      <image class="swiper-image" src="{{item.img}}" />
+    </swiper-item>
+  </swiper>
 
-<view class="avatar-container margin-top-lg margin-right-xl">
-  <image class="avatar-img round margin-right" wx:if="{{avatarURL}}" src="{{avatarURL}}" />
-  <image
-    class="avatar-img round margin-right"
-    wx:if="{{!avatarURL}}"
-    src="/resources/account.png"
-    bindtap="getUserProfile"
-  />
-  <view class="text-yellow" bindtap="onRegisterTap">驾驶资格未认证</view>
+  <view class="avatar-container margin-top-lg margin-right-xl">
+    <view class="avatar-heading text-xxl text-bold">我的行程</view>
+    <image class="avatar-img round margin-right" wx:if="{{avatarURL}}" src="{{avatarURL}}" />
+    <image
+      class="avatar-img round margin-right"
+      wx:if="{{!avatarURL}}"
+      src="/resources/account.png"
+      bindtap="getUserProfile"
+    />
+    <view class="text-yellow" bindtap="onRegisterTap">驾驶资格未认证</view>
+  </view>
 </view>
+
+<!-- 垂直滚动的导航组件 -->
+<scroll-view scroll-y scroll-with-animation enable-back-to-top style="height: {{tripsHeight}}px">
+  <view
+    wx:for="{{trips}}"
+    wx:key="id"
+    class="trips bg-white margin-bottom margin-lr padding-bottom"
+  >
+    <view class="cu-bar solid-bottom padding-right">
+      <view class="action">
+        <text wx:if="{{item.status==='已完成'}}" class="cuIcon-title text-green"> </text>
+        <text wx:if="{{item.status==='未完成'}}" class="cuIcon-title text-yellow"> </text>
+        Tab-{{item.id}}
+      </view>
+      <view>{{item.status}}</view>
+    </view>
+    <view class="trip-detail padding-right">
+      <view class="detail-left padding-top">
+        <view class="detail-row">
+          <view class="field padding-lr">起</view>
+          <view class="value text-black text-bold">{{item.start}}</view>
+        </view>
+        <view class="detail-row">
+          <view class="field padding-lr">终</view>
+          <view class="value text-black text-bold">{{item.end}}</view>
+        </view>
+        <view class="detail-row">
+          <view class="field padding-lr">距</view>
+          <view class="value text-black text-bold">{{item.distance}}</view>
+        </view>
+        <view class="detail-row">
+          <view class="field padding-lr">时</view>
+          <view class="value text-black text-bold">{{item.duration}}</view>
+        </view>
+      </view>
+      <view class="detail-right">
+        <view class="fee text-xxl text-price text-bold">{{item.fee}}</view>
+      </view>
+    </view>
+  </view>
+</scroll-view>

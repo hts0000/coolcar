@@ -14,7 +14,32 @@ swiper {
     justify-content: flex-end;
 }
 
+.avatar-heading {
+    position: absolute;
+    left: 50rpx;
+    font-style: italic;
+    font-weight: bold;
+}
+
 .avatar-img {
     height: 60rpx;
     width: 60rpx;
+}
+
+.trips {
+    border-radius: 25rpx;
+}
+
+.trip-detail {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.detail-row {
+    display: flex;
+}
+
+.fee {
+    font-style: italic;
 }
