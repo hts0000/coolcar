@@ -4,6 +4,7 @@ Page({
   /**
    * 页面的初始数据
    */
+  redirectURL: '',
   data: {
     licNo: '',
     name: '',
@@ -76,17 +77,23 @@ Page({
     this.setData({
       state: 'VERIFIED',
     })
-    // redirectTo跳转至新页面，不会保留当前页面，不可退回
-    wx.redirectTo({
-      url: '/pages/lock/lock',
-    })
+    // redirect会带上扫码的车辆信息，如果redirect为空，说明不是由租车扫码进入认证页面的
+    // 因此留在当前页面即可。如果不为空，说明要租车，跳转至车辆解锁页面。
+    if (this.redirectURL) {
+      // redirectTo跳转至新页面，不会保留当前页面，不可退回
+      wx.redirectTo({
+        url: this.redirectURL,
+      })
+    }
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad() {
-
+  onLoad(opt) {
+    if (opt.redirectURL) {
+      this.redirectURL = decodeURIComponent(opt.redirectURL)
+    }
   },
 
   /**

@@ -12,13 +12,13 @@
   >
     <cover-view class="icon-container">
       <cover-image
-        clas="round"
+        class="round"
         src="{{avatarURL?avatarURL:'/resources/account.png'}}"
         bindtap="onMyTripsTap"
       ></cover-image>
       <cover-image bindtap="onMyLocationTap" src="/resources/my_location.png"></cover-image>
     </cover-view>
-    <cover-view class="btn-container bg-grey round" bindtap="onScanClicked">
+    <cover-view class="btn-container bg-grey round" bindtap="onScanTap">
       <cover-view>扫码租车</cover-view>
     </cover-view>
   </map>

@@ -102,12 +102,20 @@ Page({
   },
 
   // 扫码租车按钮实现
-  onScanClicked() {
+  onScanTap() {
     wx.scanCode({
       success: () => {
+        // TODO: 从二维码中获取car_id
+        // 模拟已经获得car_id
+        const car_id = 'car_123'
+
+        // 指示register页面接下来跳转到lock页面
+        const redirectURL = `/pages/lock/lock?car_id=${car_id}`
+
         // navigateTo跳转至新页面，当前页面会保留，可退回
+        // encodeURIComponent将url解析成合法形式（将/、空格之类的转义成%20这种形式）
         wx.navigateTo({
-          url: "/pages/register/register",
+          url: `/pages/register/register?redirectURL=${encodeURIComponent(redirectURL)}`,
         })
       },
       fail: console.error

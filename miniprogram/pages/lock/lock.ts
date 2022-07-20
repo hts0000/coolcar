@@ -45,7 +45,8 @@ Page({
     wx.getLocation({
       type: 'gcj02',
       success: loc => {
-        // TODO: 向后端传输数据
+        // TODO: 向后端传输数据，创建行程
+        // 模拟创建行程
         console.log('starting a trip', {
           location: {
             latitude: loc.latitude,
@@ -55,6 +56,8 @@ Page({
           avatarURL: this.data.isShareLocation ? this.data.userInfo.avatarUrl : '',
           carID: '123456',
         })
+
+        const tripID = 'trip_456'
         // 显示一个开锁中提示
         wx.showLoading({
           title: '开锁中',
@@ -64,7 +67,7 @@ Page({
         // 模拟汽车开锁等待时间
         setTimeout(() => {
           wx.redirectTo({
-            url: '/pages/driving/driving',
+            url: `/pages/driving/driving?trip_id=${tripID}`,
           })
         }, 3000)
       },
@@ -81,7 +84,8 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad() {
+  onLoad(opt) {
+    console.log("unlocking car", opt.car_id)
     // 每次打开小程序时，就去获取是否分享行程这个值
     // 如果没有这个值，则默认设置为true
     // 有则取本地值
