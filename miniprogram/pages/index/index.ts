@@ -107,21 +107,27 @@ Page({
   onScanTap() {
     wx.scanCode({
       success: () => {
-        // TODO: 从二维码中获取car_id
-        // 模拟已经获得car_id
-        const carID = 'car_123'
+        // showModal弹出一个对话框
+        wx.showModal({
+          title: '需要进行驾驶证审核',
+          success: () => {
+            // TODO: 从二维码中获取car_id
+            // 模拟已经获得car_id
+            const carID = 'car_123'
 
-        // 指示register页面接下来跳转到lock页面
-        const redirectURL = routing.lock({
-          carID: carID,
-        })
+            // 指示register页面接下来跳转到lock页面
+            const redirectURL = routing.lock({
+              carID: carID,
+            })
 
-        // navigateTo跳转至新页面，当前页面会保留，可退回
-        // encodeURIComponent将url解析成合法形式（将/、空格之类的转义成%20这种形式）
-        wx.navigateTo({
-          url: routing.register({
-            redirectURL: redirectURL,
-          }),
+            // navigateTo跳转至新页面，当前页面会保留，可退回
+            // encodeURIComponent将url解析成合法形式（将/、空格之类的转义成%20这种形式）
+            wx.navigateTo({
+              url: routing.register({
+                redirectURL: redirectURL,
+              }),
+            })
+          },
         })
       },
       fail: console.error
