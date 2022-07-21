@@ -1,0 +1,9 @@
+/* components/modal/modal.wxss */
+
+.cu-bar .action {
+    width: 100%;
+}
+
+.btn.cu-btn {
+    width: 200rpx;
+}

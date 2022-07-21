@@ -106,29 +106,33 @@ Page({
   // 扫码租车按钮实现
   onScanTap() {
     wx.scanCode({
-      success: () => {
-        // showModal弹出一个对话框
-        wx.showModal({
-          title: '需要进行驾驶证审核',
-          success: () => {
-            // TODO: 从二维码中获取car_id
-            // 模拟已经获得car_id
-            const carID = 'car_123'
+      success: async () => {
+        // 展示一个自定义的对话框，当对话框关闭时，跳转到下一页面
+        await this.selectComponent('#licModal').showModal()
+        // TODO: 从二维码中获取car_id
+        // 模拟已经获得car_id
+        const carID = 'car_123'
 
-            // 指示register页面接下来跳转到lock页面
-            const redirectURL = routing.lock({
-              carID: carID,
-            })
-
-            // navigateTo跳转至新页面，当前页面会保留，可退回
-            // encodeURIComponent将url解析成合法形式（将/、空格之类的转义成%20这种形式）
-            wx.navigateTo({
-              url: routing.register({
-                redirectURL: redirectURL,
-              }),
-            })
-          },
+        // 指示register页面接下来跳转到lock页面
+        const redirectURL = routing.lock({
+          carID: carID,
         })
+
+        // navigateTo跳转至新页面，当前页面会保留，可退回
+        // encodeURIComponent将url解析成合法形式（将/、空格之类的转义成%20这种形式）
+        wx.navigateTo({
+          url: routing.register({
+            redirectURL: redirectURL,
+          }),
+        })
+
+        // showModal弹出一个对话框
+        // wx.showModal({
+        //   title: '需要进行驾驶证审核',
+        //   success: () => {
+        //     console.log('微信内置对话框组件')
+        //   },
+        // })
       },
       fail: console.error
     })

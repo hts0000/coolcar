@@ -22,4 +22,5 @@
       <cover-view>扫码租车</cover-view>
     </cover-view>
   </map>
+  <modal id="licModal" title="身份认证" contents="需要进行驾驶证审核"></modal>
 </view>
