@@ -1,3 +1,5 @@
+import { IAppOption } from "./appoption"
+
 // app.ts
 App<IAppOption>({
   globalData: {},
