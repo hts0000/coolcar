@@ -2,7 +2,7 @@ package tripservice
 
 import (
 	"context"
-	"coolcar/trippb"
+	trippb "coolcar/gen/go/trip"
 )
 
 // type TripServiceServer interface {

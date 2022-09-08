@@ -34,5 +34,10 @@
         }
       ]
     }
+  },
+  "projectname": "wx",
+  "setting": {
+    "compileHotReLoad": true,
+    "urlCheck": false
   }
 }

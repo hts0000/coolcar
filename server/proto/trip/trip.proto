@@ -1,6 +1,9 @@
 syntax = "proto3";
 package coolcar;
-option go_package = "coolcar/proto/gen/go;trippb";  // 生成的路径;生成的包名
+// option go_package = "coolcar/trippb;trippb";  // 生成的路径;生成的包名
+option go_package = "coolcar/trippb";
+
+import "google/api/annotations.proto";
 
 message Location {
     double latitude = 1;
@@ -21,8 +24,8 @@ message Trip {
     repeated Location path_locations = 7;
     string end = 2;
     Location end_pos = 6;
-    int64 duration_sec = 3;
-    int64 fee_cent = 4;
+    int32 duration_sec = 3;
+    int32 fee_cent = 4;
     TripStatus status = 8;
 }
 
@@ -36,5 +39,9 @@ message GetTripResponse {
 }
 
 service TripService {
-    rpc GetTrip (GetTripRequest) returns (GetTripResponse) {};
+    rpc GetTrip (GetTripRequest) returns (GetTripResponse) {
+        option (google.api.http) = {
+            get: "/trip/{id}"
+        };
+    }
 }

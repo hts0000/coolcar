@@ -1,0 +1,10 @@
+type: google.api.Service
+config_version: 3
+
+# 这个文件的功能proto可以集成实现了
+http:
+  rules:
+    # 选择哪一个service进行暴露
+    - selector: coolcar.TripService.GetTrip
+      # 暴露的方法和路由地址
+      get: /trip/{id}

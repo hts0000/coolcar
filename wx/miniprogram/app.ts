@@ -2,6 +2,12 @@
 App<IAppOption>({
   globalData: {},
   onLaunch() {
+    wx.request({
+      url: "http://localhost:8080/trip/12345",
+      method: "GET",
+      success: console.log,
+      fail: console.error,
+    })
     // 登录
     wx.login({
       success: res => {
