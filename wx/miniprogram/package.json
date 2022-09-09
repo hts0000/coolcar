@@ -2,12 +2,14 @@
   "name": "miniprogram-ts-less-quickstart",
   "version": "1.0.0",
   "description": "",
-  "scripts": {
-  },
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "",
   "dependencies": {
+    "camelcase-keys": "^8.0.2",
+    "protobufjs": "^7.1.0",
+    "protobufjs-cli": "^1.0.1"
   },
   "devDependencies": {
     "miniprogram-api-typings": "^2.8.3-1"

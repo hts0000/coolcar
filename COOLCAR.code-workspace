@@ -7,5 +7,7 @@
 			"path": "server"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"powershell.cwd": "c:\\Users\\hts0000\\Desktop\\wechat-miniapp\\coolcar\\server"
+	}
 }
