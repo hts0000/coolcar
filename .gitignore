@@ -15,7 +15,9 @@
 __debug_bin
 
 **/wx/miniprogram/**/*.js
-!**/wx/miniprogram/gen/ts/*.js
+!**/wx/miniprogram/gen/ts/**/*.js
 
 node_modules
 miniprogram_npm
+
+private.key
