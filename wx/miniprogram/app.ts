@@ -1,6 +1,7 @@
 import camelcaseKeys from "camelcase-keys"
 import { IAppOption } from "./appoption"
 import { auth } from "./gen/ts/auth/auth_pb"
+import { rental } from "./gen/ts/auth/rental_pb"
 
 // app.ts
 App<IAppOption>({
@@ -21,6 +22,16 @@ App<IAppOption>({
               camelcaseKeys(res.data as object)
             )
             console.log(loginResp)
+            wx.request({
+              url: "http://localhost:8080/v1/trip",
+              method: "POST",
+              data: {
+                start: "abc"
+              } as rental.v1.ICreateTripRequest,
+              header: {
+                authorization: "Bearer " + loginResp.accessToken,
+              },
+            })
           },
           // success: console.log,
           fail: console.error,
