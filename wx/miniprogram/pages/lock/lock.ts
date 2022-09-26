@@ -1,3 +1,4 @@
+import { TripService } from "../../service/trip"
 import { routing } from "../../utils/routing"
 
 const shareLocationKey = 'is_share_location'
@@ -58,7 +59,10 @@ Page({
           avatarURL: this.data.isShareLocation ? this.data.userInfo.avatarUrl : '',
           carID: '123456',
         })
-
+        TripService.CreateTrip({
+          start: "abc"
+        })
+        return
         const tripID = 'trip_456'
         // 显示一个开锁中提示
         wx.showLoading({
