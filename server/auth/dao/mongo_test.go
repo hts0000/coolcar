@@ -2,7 +2,9 @@ package dao
 
 import (
 	"context"
-	mgo "coolcar/shared/mongo"
+	"coolcar/shared/id"
+	mgutil "coolcar/shared/mongo"
+	"coolcar/shared/mongo/objid"
 	mongotesting "coolcar/shared/mongo/testing"
 	"os"
 	"testing"
@@ -34,19 +36,19 @@ func TestResolveAccountID(t *testing.T) {
 	m := NewMongo(mc.Database("coolcar"))
 	_, err = m.col.InsertMany(c, []any{
 		bson.M{
-			mgo.IDField: mustObjID("632b1c6e130f50c2748137aa"),
-			openIDField: "open_id_1",
+			mgutil.IDFieldName: objid.MustFromID(id.AccountID("632b1c6e130f50c2748137aa")),
+			openIDField:        "open_id_1",
 		},
 		bson.M{
-			mgo.IDField: mustObjID("632b1c6e130f50c2748137ab"),
-			openIDField: "open_id_2",
+			mgutil.IDFieldName: objid.MustFromID(id.AccountID("632b1c6e130f50c2748137ab")),
+			openIDField:        "open_id_2",
 		},
 	})
 	if err != nil {
 		t.Fatalf("cannot insert initial values: %v", err)
 	}
-	m.newObjID = func() primitive.ObjectID {
-		return mustObjID("632b1c6e130f50c2748137ad")
+	mgutil.NewObjID = func() primitive.ObjectID {
+		return objid.MustFromID(id.AccountID("632b1c6e130f50c2748137ad"))
 	}
 
 	cases := []struct {
@@ -77,17 +79,9 @@ func TestResolveAccountID(t *testing.T) {
 			if err != nil {
 				t.Errorf("faild resolve account id for %q: %v", c.openID, err)
 			}
-			if id != c.want {
+			if id.String() != c.want {
 				t.Errorf("faild resolve account id: want: %q, got: %q", c.want, id)
 			}
 		})
 	}
-}
-
-func mustObjID(hex string) primitive.ObjectID {
-	id, err := primitive.ObjectIDFromHex(hex)
-	if err != nil {
-		panic(err)
-	}
-	return id
 }
