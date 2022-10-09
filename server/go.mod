@@ -14,6 +14,8 @@ require (
 	google.golang.org/protobuf v1.28.1
 )
 
+require github.com/google/go-cmp v0.5.9
+
 require (
 	github.com/Microsoft/go-winio v0.5.2 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
