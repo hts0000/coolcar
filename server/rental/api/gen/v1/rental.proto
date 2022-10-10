@@ -67,7 +67,66 @@ service TripService {
             body: "*"
         };
     }
-    rpc GetTrip (GetTripRequest) returns (Trip);
-    rpc GetTrips (GetTripsRequest) returns (GetTripsResponse);
-    rpc UpdateTrip (UpdateTripRequest) returns (Trip);
+    rpc GetTrip (GetTripRequest) returns (Trip) {
+        option (google.api.http) = {
+            get: "/v1/trip/{id}"
+        };
+    }
+    rpc GetTrips (GetTripsRequest) returns (GetTripsResponse) {
+        option (google.api.http) = {
+            get: "/v1/trips"
+        };
+    }
+    rpc UpdateTrip (UpdateTripRequest) returns (Trip) {
+        option (google.api.http) = {
+            put: "/v1/trip/{id}"
+            body: "*"
+        };
+    }
+}
+
+enum Gender {
+    G_NOT_SPECIFIED = 0;
+    MALE = 1;
+    FEMALE = 2;
+}
+
+enum IdentityStatus {
+    UNSUBMITTED = 0;
+    PENDING = 1;
+    VERIFIED = 2;
+}
+
+message Profile {
+    Identity identity = 1;
+    IdentityStatus identity_status = 2;
+}
+
+message Identity {
+    string lic_number = 1;
+    string name = 2;
+    Gender gender = 3;
+    int64 birth_date_nillis = 4;
+}
+
+message GetProfileRequest {}
+message ClearProfileRequest {}
+
+service ProfileService {
+    rpc GetProfile (GetProfileRequest) returns (Profile) {
+        option (google.api.http) = {
+            get: "/v1/profile"
+        };
+    }
+    rpc SubmitProfile (Identity) returns (Profile) {
+        option (google.api.http) = {
+            post: "/v1/profile"
+            body: "*"
+        };
+    }
+    rpc ClearProfile (ClearProfileRequest) returns (Profile) {
+        option (google.api.http) = {
+            delete: "/v1/profile"
+        };
+    }
 }

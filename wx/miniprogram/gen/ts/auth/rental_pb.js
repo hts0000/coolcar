@@ -1,3 +1,4 @@
+import * as $protobuf from "protobufjs";
 // Common aliases
 const $Reader = $protobuf.Reader, $util = $protobuf.util;
 
@@ -13,7 +14,7 @@ export const rental = $root.rental = (() => {
      */
     const rental = {};
 
-    rental.v1 = (function() {
+    rental.v1 = (function () {
 
         /**
          * Namespace v1.
@@ -22,7 +23,7 @@ export const rental = $root.rental = (() => {
          */
         const v1 = {};
 
-        v1.Location = (function() {
+        v1.Location = (function () {
 
             /**
              * Properties of a Location.
@@ -81,17 +82,17 @@ export const rental = $root.rental = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.latitude = reader.double();
                             break;
                         }
-                    case 2: {
+                        case 2: {
                             message.longitude = reader.double();
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -169,7 +170,7 @@ export const rental = $root.rental = (() => {
             return Location;
         })();
 
-        v1.LocationStatus = (function() {
+        v1.LocationStatus = (function () {
 
             /**
              * Properties of a LocationStatus.
@@ -246,25 +247,25 @@ export const rental = $root.rental = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.location = $root.rental.v1.Location.decode(reader, reader.uint32());
                             break;
                         }
-                    case 2: {
+                        case 2: {
                             message.feeCent = reader.int32();
                             break;
                         }
-                    case 3: {
+                        case 3: {
                             message.kmDriven = reader.double();
                             break;
                         }
-                    case 4: {
+                        case 4: {
                             message.poiName = reader.string();
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -363,7 +364,7 @@ export const rental = $root.rental = (() => {
          * @property {number} IN_PROGRESS=1 IN_PROGRESS value
          * @property {number} FINISHED=2 FINISHED value
          */
-        v1.TripStatus = (function() {
+        v1.TripStatus = (function () {
             const valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "TS_NOT_SPECIFIED"] = 0;
             values[valuesById[1] = "IN_PROGRESS"] = 1;
@@ -371,7 +372,7 @@ export const rental = $root.rental = (() => {
             return values;
         })();
 
-        v1.TripEntity = (function() {
+        v1.TripEntity = (function () {
 
             /**
              * Properties of a TripEntity.
@@ -430,17 +431,17 @@ export const rental = $root.rental = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.id = reader.string();
                             break;
                         }
-                    case 2: {
+                        case 2: {
                             message.trip = $root.rental.v1.Trip.decode(reader, reader.uint32());
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -521,7 +522,7 @@ export const rental = $root.rental = (() => {
             return TripEntity;
         })();
 
-        v1.Trip = (function() {
+        v1.Trip = (function () {
 
             /**
              * Properties of a Trip.
@@ -616,33 +617,33 @@ export const rental = $root.rental = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.accountId = reader.string();
                             break;
                         }
-                    case 2: {
+                        case 2: {
                             message.carId = reader.string();
                             break;
                         }
-                    case 3: {
+                        case 3: {
                             message.start = $root.rental.v1.LocationStatus.decode(reader, reader.uint32());
                             break;
                         }
-                    case 4: {
+                        case 4: {
                             message.current = $root.rental.v1.LocationStatus.decode(reader, reader.uint32());
                             break;
                         }
-                    case 5: {
+                        case 5: {
                             message.end = $root.rental.v1.LocationStatus.decode(reader, reader.uint32());
                             break;
                         }
-                    case 6: {
+                        case 6: {
                             message.status = reader.int32();
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -680,24 +681,24 @@ export const rental = $root.rental = (() => {
                     message.end = $root.rental.v1.LocationStatus.fromObject(object.end);
                 }
                 switch (object.status) {
-                default:
-                    if (typeof object.status === "number") {
-                        message.status = object.status;
+                    default:
+                        if (typeof object.status === "number") {
+                            message.status = object.status;
+                            break;
+                        }
                         break;
-                    }
-                    break;
-                case "TS_NOT_SPECIFIED":
-                case 0:
-                    message.status = 0;
-                    break;
-                case "IN_PROGRESS":
-                case 1:
-                    message.status = 1;
-                    break;
-                case "FINISHED":
-                case 2:
-                    message.status = 2;
-                    break;
+                    case "TS_NOT_SPECIFIED":
+                    case 0:
+                        message.status = 0;
+                        break;
+                    case "IN_PROGRESS":
+                    case 1:
+                        message.status = 1;
+                        break;
+                    case "FINISHED":
+                    case 2:
+                        message.status = 2;
+                        break;
                 }
                 return message;
             };
@@ -767,7 +768,7 @@ export const rental = $root.rental = (() => {
             return Trip;
         })();
 
-        v1.CreateTripRequest = (function() {
+        v1.CreateTripRequest = (function () {
 
             /**
              * Properties of a CreateTripRequest.
@@ -826,17 +827,17 @@ export const rental = $root.rental = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.start = $root.rental.v1.Location.decode(reader, reader.uint32());
                             break;
                         }
-                    case 2: {
+                        case 2: {
                             message.carId = reader.string();
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -917,7 +918,7 @@ export const rental = $root.rental = (() => {
             return CreateTripRequest;
         })();
 
-        v1.GetTripRequest = (function() {
+        v1.GetTripRequest = (function () {
 
             /**
              * Properties of a GetTripRequest.
@@ -967,13 +968,13 @@ export const rental = $root.rental = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.id = reader.string();
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -1045,7 +1046,7 @@ export const rental = $root.rental = (() => {
             return GetTripRequest;
         })();
 
-        v1.GetTripsRequest = (function() {
+        v1.GetTripsRequest = (function () {
 
             /**
              * Properties of a GetTripsRequest.
@@ -1095,13 +1096,13 @@ export const rental = $root.rental = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.status = reader.int32();
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -1120,24 +1121,24 @@ export const rental = $root.rental = (() => {
                     return object;
                 let message = new $root.rental.v1.GetTripsRequest();
                 switch (object.status) {
-                default:
-                    if (typeof object.status === "number") {
-                        message.status = object.status;
+                    default:
+                        if (typeof object.status === "number") {
+                            message.status = object.status;
+                            break;
+                        }
                         break;
-                    }
-                    break;
-                case "TS_NOT_SPECIFIED":
-                case 0:
-                    message.status = 0;
-                    break;
-                case "IN_PROGRESS":
-                case 1:
-                    message.status = 1;
-                    break;
-                case "FINISHED":
-                case 2:
-                    message.status = 2;
-                    break;
+                    case "TS_NOT_SPECIFIED":
+                    case 0:
+                        message.status = 0;
+                        break;
+                    case "IN_PROGRESS":
+                    case 1:
+                        message.status = 1;
+                        break;
+                    case "FINISHED":
+                    case 2:
+                        message.status = 2;
+                        break;
                 }
                 return message;
             };
@@ -1191,7 +1192,7 @@ export const rental = $root.rental = (() => {
             return GetTripsRequest;
         })();
 
-        v1.GetTripsResponse = (function() {
+        v1.GetTripsResponse = (function () {
 
             /**
              * Properties of a GetTripsResponse.
@@ -1242,15 +1243,15 @@ export const rental = $root.rental = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             if (!(message.trips && message.trips.length))
                                 message.trips = [];
                             message.trips.push($root.rental.v1.TripEntity.decode(reader, reader.uint32()));
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -1333,7 +1334,7 @@ export const rental = $root.rental = (() => {
             return GetTripsResponse;
         })();
 
-        v1.UpdateTripRequest = (function() {
+        v1.UpdateTripRequest = (function () {
 
             /**
              * Properties of an UpdateTripRequest.
@@ -1401,21 +1402,21 @@ export const rental = $root.rental = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.id = reader.string();
                             break;
                         }
-                    case 2: {
+                        case 2: {
                             message.current = $root.rental.v1.Location.decode(reader, reader.uint32());
                             break;
                         }
-                    case 3: {
+                        case 3: {
                             message.endTrip = reader.bool();
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -1501,7 +1502,7 @@ export const rental = $root.rental = (() => {
             return UpdateTripRequest;
         })();
 
-        v1.TripService = (function() {
+        v1.TripService = (function () {
 
             /**
              * Constructs a new TripService service.
@@ -1652,6 +1653,751 @@ export const rental = $root.rental = (() => {
              */
 
             return TripService;
+        })();
+
+        /**
+         * Gender enum.
+         * @name rental.v1.Gender
+         * @enum {number}
+         * @property {number} G_NOT_SPECIFIED=0 G_NOT_SPECIFIED value
+         * @property {number} MALE=1 MALE value
+         * @property {number} FEMALE=2 FEMALE value
+         */
+        v1.Gender = (function () {
+            const valuesById = {}, values = Object.create(valuesById);
+            values[valuesById[0] = "G_NOT_SPECIFIED"] = 0;
+            values[valuesById[1] = "MALE"] = 1;
+            values[valuesById[2] = "FEMALE"] = 2;
+            return values;
+        })();
+
+        /**
+         * IdentityStatus enum.
+         * @name rental.v1.IdentityStatus
+         * @enum {number}
+         * @property {number} UNSUBMITTED=0 UNSUBMITTED value
+         * @property {number} PENDING=1 PENDING value
+         * @property {number} VERIFIED=2 VERIFIED value
+         */
+        v1.IdentityStatus = (function () {
+            const valuesById = {}, values = Object.create(valuesById);
+            values[valuesById[0] = "UNSUBMITTED"] = 0;
+            values[valuesById[1] = "PENDING"] = 1;
+            values[valuesById[2] = "VERIFIED"] = 2;
+            return values;
+        })();
+
+        v1.Profile = (function () {
+
+            /**
+             * Properties of a Profile.
+             * @memberof rental.v1
+             * @interface IProfile
+             * @property {rental.v1.IIdentity|null} [identity] Profile identity
+             * @property {rental.v1.IdentityStatus|null} [identityStatus] Profile identityStatus
+             */
+
+            /**
+             * Constructs a new Profile.
+             * @memberof rental.v1
+             * @classdesc Represents a Profile.
+             * @implements IProfile
+             * @constructor
+             * @param {rental.v1.IProfile=} [properties] Properties to set
+             */
+            function Profile(properties) {
+                if (properties)
+                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * Profile identity.
+             * @member {rental.v1.IIdentity|null|undefined} identity
+             * @memberof rental.v1.Profile
+             * @instance
+             */
+            Profile.prototype.identity = null;
+
+            /**
+             * Profile identityStatus.
+             * @member {rental.v1.IdentityStatus} identityStatus
+             * @memberof rental.v1.Profile
+             * @instance
+             */
+            Profile.prototype.identityStatus = 0;
+
+            /**
+             * Decodes a Profile message from the specified reader or buffer.
+             * @function decode
+             * @memberof rental.v1.Profile
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {rental.v1.Profile} Profile
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Profile.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                let end = length === undefined ? reader.len : reader.pos + length, message = new $root.rental.v1.Profile();
+                while (reader.pos < end) {
+                    let tag = reader.uint32();
+                    switch (tag >>> 3) {
+                        case 1: {
+                            message.identity = $root.rental.v1.Identity.decode(reader, reader.uint32());
+                            break;
+                        }
+                        case 2: {
+                            message.identityStatus = reader.int32();
+                            break;
+                        }
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a Profile message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof rental.v1.Profile
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {rental.v1.Profile} Profile
+             */
+            Profile.fromObject = function fromObject(object) {
+                if (object instanceof $root.rental.v1.Profile)
+                    return object;
+                let message = new $root.rental.v1.Profile();
+                if (object.identity != null) {
+                    if (typeof object.identity !== "object")
+                        throw TypeError(".rental.v1.Profile.identity: object expected");
+                    message.identity = $root.rental.v1.Identity.fromObject(object.identity);
+                }
+                switch (object.identityStatus) {
+                    default:
+                        if (typeof object.identityStatus === "number") {
+                            message.identityStatus = object.identityStatus;
+                            break;
+                        }
+                        break;
+                    case "UNSUBMITTED":
+                    case 0:
+                        message.identityStatus = 0;
+                        break;
+                    case "PENDING":
+                    case 1:
+                        message.identityStatus = 1;
+                        break;
+                    case "VERIFIED":
+                    case 2:
+                        message.identityStatus = 2;
+                        break;
+                }
+                return message;
+            };
+
+            /**
+             * Creates a plain object from a Profile message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof rental.v1.Profile
+             * @static
+             * @param {rental.v1.Profile} message Profile
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Profile.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                let object = {};
+                if (options.defaults) {
+                    object.identity = null;
+                    object.identityStatus = options.enums === String ? "UNSUBMITTED" : 0;
+                }
+                if (message.identity != null && message.hasOwnProperty("identity"))
+                    object.identity = $root.rental.v1.Identity.toObject(message.identity, options);
+                if (message.identityStatus != null && message.hasOwnProperty("identityStatus"))
+                    object.identityStatus = options.enums === String ? $root.rental.v1.IdentityStatus[message.identityStatus] === undefined ? message.identityStatus : $root.rental.v1.IdentityStatus[message.identityStatus] : message.identityStatus;
+                return object;
+            };
+
+            /**
+             * Converts this Profile to JSON.
+             * @function toJSON
+             * @memberof rental.v1.Profile
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Profile.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the default type url for Profile
+             * @function getTypeUrl
+             * @memberof rental.v1.Profile
+             * @static
+             * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+             * @returns {string} The default type url
+             */
+            Profile.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                if (typeUrlPrefix === undefined) {
+                    typeUrlPrefix = "type.googleapis.com";
+                }
+                return typeUrlPrefix + "/rental.v1.Profile";
+            };
+
+            return Profile;
+        })();
+
+        v1.Identity = (function () {
+
+            /**
+             * Properties of an Identity.
+             * @memberof rental.v1
+             * @interface IIdentity
+             * @property {string|null} [licNumber] Identity licNumber
+             * @property {string|null} [name] Identity name
+             * @property {rental.v1.Gender|null} [gender] Identity gender
+             * @property {number|Long|null} [birthDateNillis] Identity birthDateNillis
+             */
+
+            /**
+             * Constructs a new Identity.
+             * @memberof rental.v1
+             * @classdesc Represents an Identity.
+             * @implements IIdentity
+             * @constructor
+             * @param {rental.v1.IIdentity=} [properties] Properties to set
+             */
+            function Identity(properties) {
+                if (properties)
+                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * Identity licNumber.
+             * @member {string} licNumber
+             * @memberof rental.v1.Identity
+             * @instance
+             */
+            Identity.prototype.licNumber = "";
+
+            /**
+             * Identity name.
+             * @member {string} name
+             * @memberof rental.v1.Identity
+             * @instance
+             */
+            Identity.prototype.name = "";
+
+            /**
+             * Identity gender.
+             * @member {rental.v1.Gender} gender
+             * @memberof rental.v1.Identity
+             * @instance
+             */
+            Identity.prototype.gender = 0;
+
+            /**
+             * Identity birthDateNillis.
+             * @member {number|Long} birthDateNillis
+             * @memberof rental.v1.Identity
+             * @instance
+             */
+            Identity.prototype.birthDateNillis = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
+
+            /**
+             * Decodes an Identity message from the specified reader or buffer.
+             * @function decode
+             * @memberof rental.v1.Identity
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {rental.v1.Identity} Identity
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            Identity.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                let end = length === undefined ? reader.len : reader.pos + length, message = new $root.rental.v1.Identity();
+                while (reader.pos < end) {
+                    let tag = reader.uint32();
+                    switch (tag >>> 3) {
+                        case 1: {
+                            message.licNumber = reader.string();
+                            break;
+                        }
+                        case 2: {
+                            message.name = reader.string();
+                            break;
+                        }
+                        case 3: {
+                            message.gender = reader.int32();
+                            break;
+                        }
+                        case 4: {
+                            message.birthDateNillis = reader.int64();
+                            break;
+                        }
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates an Identity message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof rental.v1.Identity
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {rental.v1.Identity} Identity
+             */
+            Identity.fromObject = function fromObject(object) {
+                if (object instanceof $root.rental.v1.Identity)
+                    return object;
+                let message = new $root.rental.v1.Identity();
+                if (object.licNumber != null)
+                    message.licNumber = String(object.licNumber);
+                if (object.name != null)
+                    message.name = String(object.name);
+                switch (object.gender) {
+                    default:
+                        if (typeof object.gender === "number") {
+                            message.gender = object.gender;
+                            break;
+                        }
+                        break;
+                    case "G_NOT_SPECIFIED":
+                    case 0:
+                        message.gender = 0;
+                        break;
+                    case "MALE":
+                    case 1:
+                        message.gender = 1;
+                        break;
+                    case "FEMALE":
+                    case 2:
+                        message.gender = 2;
+                        break;
+                }
+                if (object.birthDateNillis != null)
+                    if ($util.Long)
+                        (message.birthDateNillis = $util.Long.fromValue(object.birthDateNillis)).unsigned = false;
+                    else if (typeof object.birthDateNillis === "string")
+                        message.birthDateNillis = parseInt(object.birthDateNillis, 10);
+                    else if (typeof object.birthDateNillis === "number")
+                        message.birthDateNillis = object.birthDateNillis;
+                    else if (typeof object.birthDateNillis === "object")
+                        message.birthDateNillis = new $util.LongBits(object.birthDateNillis.low >>> 0, object.birthDateNillis.high >>> 0).toNumber();
+                return message;
+            };
+
+            /**
+             * Creates a plain object from an Identity message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof rental.v1.Identity
+             * @static
+             * @param {rental.v1.Identity} message Identity
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            Identity.toObject = function toObject(message, options) {
+                if (!options)
+                    options = {};
+                let object = {};
+                if (options.defaults) {
+                    object.licNumber = "";
+                    object.name = "";
+                    object.gender = options.enums === String ? "G_NOT_SPECIFIED" : 0;
+                    if ($util.Long) {
+                        let long = new $util.Long(0, 0, false);
+                        object.birthDateNillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                    } else
+                        object.birthDateNillis = options.longs === String ? "0" : 0;
+                }
+                if (message.licNumber != null && message.hasOwnProperty("licNumber"))
+                    object.licNumber = message.licNumber;
+                if (message.name != null && message.hasOwnProperty("name"))
+                    object.name = message.name;
+                if (message.gender != null && message.hasOwnProperty("gender"))
+                    object.gender = options.enums === String ? $root.rental.v1.Gender[message.gender] === undefined ? message.gender : $root.rental.v1.Gender[message.gender] : message.gender;
+                if (message.birthDateNillis != null && message.hasOwnProperty("birthDateNillis"))
+                    if (typeof message.birthDateNillis === "number")
+                        object.birthDateNillis = options.longs === String ? String(message.birthDateNillis) : message.birthDateNillis;
+                    else
+                        object.birthDateNillis = options.longs === String ? $util.Long.prototype.toString.call(message.birthDateNillis) : options.longs === Number ? new $util.LongBits(message.birthDateNillis.low >>> 0, message.birthDateNillis.high >>> 0).toNumber() : message.birthDateNillis;
+                return object;
+            };
+
+            /**
+             * Converts this Identity to JSON.
+             * @function toJSON
+             * @memberof rental.v1.Identity
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            Identity.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the default type url for Identity
+             * @function getTypeUrl
+             * @memberof rental.v1.Identity
+             * @static
+             * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+             * @returns {string} The default type url
+             */
+            Identity.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                if (typeUrlPrefix === undefined) {
+                    typeUrlPrefix = "type.googleapis.com";
+                }
+                return typeUrlPrefix + "/rental.v1.Identity";
+            };
+
+            return Identity;
+        })();
+
+        v1.GetProfileRequest = (function () {
+
+            /**
+             * Properties of a GetProfileRequest.
+             * @memberof rental.v1
+             * @interface IGetProfileRequest
+             */
+
+            /**
+             * Constructs a new GetProfileRequest.
+             * @memberof rental.v1
+             * @classdesc Represents a GetProfileRequest.
+             * @implements IGetProfileRequest
+             * @constructor
+             * @param {rental.v1.IGetProfileRequest=} [properties] Properties to set
+             */
+            function GetProfileRequest(properties) {
+                if (properties)
+                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * Decodes a GetProfileRequest message from the specified reader or buffer.
+             * @function decode
+             * @memberof rental.v1.GetProfileRequest
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {rental.v1.GetProfileRequest} GetProfileRequest
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            GetProfileRequest.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                let end = length === undefined ? reader.len : reader.pos + length, message = new $root.rental.v1.GetProfileRequest();
+                while (reader.pos < end) {
+                    let tag = reader.uint32();
+                    switch (tag >>> 3) {
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a GetProfileRequest message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof rental.v1.GetProfileRequest
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {rental.v1.GetProfileRequest} GetProfileRequest
+             */
+            GetProfileRequest.fromObject = function fromObject(object) {
+                if (object instanceof $root.rental.v1.GetProfileRequest)
+                    return object;
+                return new $root.rental.v1.GetProfileRequest();
+            };
+
+            /**
+             * Creates a plain object from a GetProfileRequest message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof rental.v1.GetProfileRequest
+             * @static
+             * @param {rental.v1.GetProfileRequest} message GetProfileRequest
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            GetProfileRequest.toObject = function toObject() {
+                return {};
+            };
+
+            /**
+             * Converts this GetProfileRequest to JSON.
+             * @function toJSON
+             * @memberof rental.v1.GetProfileRequest
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            GetProfileRequest.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the default type url for GetProfileRequest
+             * @function getTypeUrl
+             * @memberof rental.v1.GetProfileRequest
+             * @static
+             * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+             * @returns {string} The default type url
+             */
+            GetProfileRequest.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                if (typeUrlPrefix === undefined) {
+                    typeUrlPrefix = "type.googleapis.com";
+                }
+                return typeUrlPrefix + "/rental.v1.GetProfileRequest";
+            };
+
+            return GetProfileRequest;
+        })();
+
+        v1.ClearProfileRequest = (function () {
+
+            /**
+             * Properties of a ClearProfileRequest.
+             * @memberof rental.v1
+             * @interface IClearProfileRequest
+             */
+
+            /**
+             * Constructs a new ClearProfileRequest.
+             * @memberof rental.v1
+             * @classdesc Represents a ClearProfileRequest.
+             * @implements IClearProfileRequest
+             * @constructor
+             * @param {rental.v1.IClearProfileRequest=} [properties] Properties to set
+             */
+            function ClearProfileRequest(properties) {
+                if (properties)
+                    for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                        if (properties[keys[i]] != null)
+                            this[keys[i]] = properties[keys[i]];
+            }
+
+            /**
+             * Decodes a ClearProfileRequest message from the specified reader or buffer.
+             * @function decode
+             * @memberof rental.v1.ClearProfileRequest
+             * @static
+             * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+             * @param {number} [length] Message length if known beforehand
+             * @returns {rental.v1.ClearProfileRequest} ClearProfileRequest
+             * @throws {Error} If the payload is not a reader or valid buffer
+             * @throws {$protobuf.util.ProtocolError} If required fields are missing
+             */
+            ClearProfileRequest.decode = function decode(reader, length) {
+                if (!(reader instanceof $Reader))
+                    reader = $Reader.create(reader);
+                let end = length === undefined ? reader.len : reader.pos + length, message = new $root.rental.v1.ClearProfileRequest();
+                while (reader.pos < end) {
+                    let tag = reader.uint32();
+                    switch (tag >>> 3) {
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
+                    }
+                }
+                return message;
+            };
+
+            /**
+             * Creates a ClearProfileRequest message from a plain object. Also converts values to their respective internal types.
+             * @function fromObject
+             * @memberof rental.v1.ClearProfileRequest
+             * @static
+             * @param {Object.<string,*>} object Plain object
+             * @returns {rental.v1.ClearProfileRequest} ClearProfileRequest
+             */
+            ClearProfileRequest.fromObject = function fromObject(object) {
+                if (object instanceof $root.rental.v1.ClearProfileRequest)
+                    return object;
+                return new $root.rental.v1.ClearProfileRequest();
+            };
+
+            /**
+             * Creates a plain object from a ClearProfileRequest message. Also converts values to other types if specified.
+             * @function toObject
+             * @memberof rental.v1.ClearProfileRequest
+             * @static
+             * @param {rental.v1.ClearProfileRequest} message ClearProfileRequest
+             * @param {$protobuf.IConversionOptions} [options] Conversion options
+             * @returns {Object.<string,*>} Plain object
+             */
+            ClearProfileRequest.toObject = function toObject() {
+                return {};
+            };
+
+            /**
+             * Converts this ClearProfileRequest to JSON.
+             * @function toJSON
+             * @memberof rental.v1.ClearProfileRequest
+             * @instance
+             * @returns {Object.<string,*>} JSON object
+             */
+            ClearProfileRequest.prototype.toJSON = function toJSON() {
+                return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+            };
+
+            /**
+             * Gets the default type url for ClearProfileRequest
+             * @function getTypeUrl
+             * @memberof rental.v1.ClearProfileRequest
+             * @static
+             * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+             * @returns {string} The default type url
+             */
+            ClearProfileRequest.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+                if (typeUrlPrefix === undefined) {
+                    typeUrlPrefix = "type.googleapis.com";
+                }
+                return typeUrlPrefix + "/rental.v1.ClearProfileRequest";
+            };
+
+            return ClearProfileRequest;
+        })();
+
+        v1.ProfileService = (function () {
+
+            /**
+             * Constructs a new ProfileService service.
+             * @memberof rental.v1
+             * @classdesc Represents a ProfileService
+             * @extends $protobuf.rpc.Service
+             * @constructor
+             * @param {$protobuf.RPCImpl} rpcImpl RPC implementation
+             * @param {boolean} [requestDelimited=false] Whether requests are length-delimited
+             * @param {boolean} [responseDelimited=false] Whether responses are length-delimited
+             */
+            function ProfileService(rpcImpl, requestDelimited, responseDelimited) {
+                $protobuf.rpc.Service.call(this, rpcImpl, requestDelimited, responseDelimited);
+            }
+
+            (ProfileService.prototype = Object.create($protobuf.rpc.Service.prototype)).constructor = ProfileService;
+
+            /**
+             * Callback as used by {@link rental.v1.ProfileService#getProfile}.
+             * @memberof rental.v1.ProfileService
+             * @typedef GetProfileCallback
+             * @type {function}
+             * @param {Error|null} error Error, if any
+             * @param {rental.v1.Profile} [response] Profile
+             */
+
+            /**
+             * Calls GetProfile.
+             * @function getProfile
+             * @memberof rental.v1.ProfileService
+             * @instance
+             * @param {rental.v1.IGetProfileRequest} request GetProfileRequest message or plain object
+             * @param {rental.v1.ProfileService.GetProfileCallback} callback Node-style callback called with the error, if any, and Profile
+             * @returns {undefined}
+             * @variation 1
+             */
+            Object.defineProperty(ProfileService.prototype.getProfile = function getProfile(request, callback) {
+                return this.rpcCall(getProfile, $root.rental.v1.GetProfileRequest, $root.rental.v1.Profile, request, callback);
+            }, "name", { value: "GetProfile" });
+
+            /**
+             * Calls GetProfile.
+             * @function getProfile
+             * @memberof rental.v1.ProfileService
+             * @instance
+             * @param {rental.v1.IGetProfileRequest} request GetProfileRequest message or plain object
+             * @returns {Promise<rental.v1.Profile>} Promise
+             * @variation 2
+             */
+
+            /**
+             * Callback as used by {@link rental.v1.ProfileService#submitProfile}.
+             * @memberof rental.v1.ProfileService
+             * @typedef SubmitProfileCallback
+             * @type {function}
+             * @param {Error|null} error Error, if any
+             * @param {rental.v1.Profile} [response] Profile
+             */
+
+            /**
+             * Calls SubmitProfile.
+             * @function submitProfile
+             * @memberof rental.v1.ProfileService
+             * @instance
+             * @param {rental.v1.IIdentity} request Identity message or plain object
+             * @param {rental.v1.ProfileService.SubmitProfileCallback} callback Node-style callback called with the error, if any, and Profile
+             * @returns {undefined}
+             * @variation 1
+             */
+            Object.defineProperty(ProfileService.prototype.submitProfile = function submitProfile(request, callback) {
+                return this.rpcCall(submitProfile, $root.rental.v1.Identity, $root.rental.v1.Profile, request, callback);
+            }, "name", { value: "SubmitProfile" });
+
+            /**
+             * Calls SubmitProfile.
+             * @function submitProfile
+             * @memberof rental.v1.ProfileService
+             * @instance
+             * @param {rental.v1.IIdentity} request Identity message or plain object
+             * @returns {Promise<rental.v1.Profile>} Promise
+             * @variation 2
+             */
+
+            /**
+             * Callback as used by {@link rental.v1.ProfileService#clearProfile}.
+             * @memberof rental.v1.ProfileService
+             * @typedef ClearProfileCallback
+             * @type {function}
+             * @param {Error|null} error Error, if any
+             * @param {rental.v1.Profile} [response] Profile
+             */
+
+            /**
+             * Calls ClearProfile.
+             * @function clearProfile
+             * @memberof rental.v1.ProfileService
+             * @instance
+             * @param {rental.v1.IClearProfileRequest} request ClearProfileRequest message or plain object
+             * @param {rental.v1.ProfileService.ClearProfileCallback} callback Node-style callback called with the error, if any, and Profile
+             * @returns {undefined}
+             * @variation 1
+             */
+            Object.defineProperty(ProfileService.prototype.clearProfile = function clearProfile(request, callback) {
+                return this.rpcCall(clearProfile, $root.rental.v1.ClearProfileRequest, $root.rental.v1.Profile, request, callback);
+            }, "name", { value: "ClearProfile" });
+
+            /**
+             * Calls ClearProfile.
+             * @function clearProfile
+             * @memberof rental.v1.ProfileService
+             * @instance
+             * @param {rental.v1.IClearProfileRequest} request ClearProfileRequest message or plain object
+             * @returns {Promise<rental.v1.Profile>} Promise
+             * @variation 2
+             */
+
+            return ProfileService;
         })();
 
         return v1;

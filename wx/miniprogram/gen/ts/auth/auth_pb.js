@@ -1,3 +1,4 @@
+import * as $protobuf from "protobufjs";
 // Common aliases
 const $Reader = $protobuf.Reader, $util = $protobuf.util;
 
@@ -13,7 +14,7 @@ export const auth = $root.auth = (() => {
      */
     const auth = {};
 
-    auth.v1 = (function() {
+    auth.v1 = (function () {
 
         /**
          * Namespace v1.
@@ -22,7 +23,7 @@ export const auth = $root.auth = (() => {
          */
         const v1 = {};
 
-        v1.LoginRequest = (function() {
+        v1.LoginRequest = (function () {
 
             /**
              * Properties of a LoginRequest.
@@ -72,13 +73,13 @@ export const auth = $root.auth = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.code = reader.string();
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -150,7 +151,7 @@ export const auth = $root.auth = (() => {
             return LoginRequest;
         })();
 
-        v1.LoginResponse = (function() {
+        v1.LoginResponse = (function () {
 
             /**
              * Properties of a LoginResponse.
@@ -209,17 +210,17 @@ export const auth = $root.auth = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.accessToken = reader.string();
                             break;
                         }
-                    case 2: {
+                        case 2: {
                             message.expirseIn = reader.int32();
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -297,7 +298,7 @@ export const auth = $root.auth = (() => {
             return LoginResponse;
         })();
 
-        v1.AuthService = (function() {
+        v1.AuthService = (function () {
 
             /**
              * Constructs a new AuthService service.
