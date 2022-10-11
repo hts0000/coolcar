@@ -10,7 +10,6 @@ import (
 	"testing"
 
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func TestMain(m *testing.M) {
@@ -42,9 +41,7 @@ func TestResolveAccountID(t *testing.T) {
 	if err != nil {
 		t.Fatalf("cannot insert initial values: %v", err)
 	}
-	mgutil.NewObjID = func() primitive.ObjectID {
-		return objid.MustFromID(id.AccountID("632b1c6e130f50c2748137ad"))
-	}
+	mgutil.NewObjectIDWithValue(id.AccountID("632b1c6e130f50c2748137ad"))
 
 	cases := []struct {
 		name   string
