@@ -49,13 +49,13 @@ func (m *Mongo) CreateTrip(c context.Context, trip *rentalpb.Trip) (*TripRecord,
 }
 
 func (m *Mongo) GetTrip(c context.Context, id id.TripID, accountID id.AccountID) (*TripRecord, error) {
-	onjID, err := objid.FromID(id)
+	objID, err := objid.FromID(id)
 	if err != nil {
 		return nil, fmt.Errorf("invalid id: %v", err)
 	}
 
 	res := m.col.FindOne(c, bson.M{
-		mgutil.IDFieldName: onjID,
+		mgutil.IDFieldName: objID,
 		accountField:       accountID,
 	})
 	if err := res.Err(); err != nil {
@@ -94,4 +94,31 @@ func (m *Mongo) GetTrips(c context.Context, aid id.AccountID, status rentalpb.Tr
 		trips = append(trips, &trip)
 	}
 	return trips, nil
+}
+
+func (m *Mongo) UpdateTrip(c context.Context, tid id.TripID, aid id.AccountID, updatedAt int64, trip *rentalpb.Trip) error {
+	objID, err := objid.FromID(tid)
+	if err != nil {
+		return fmt.Errorf("invalid id: %v", err)
+	}
+
+	newUpdatedAt := mgutil.UpdatedAt()
+	res, err := m.col.UpdateOne(c, bson.M{
+		mgutil.IDFieldName: objID,
+		accountField:       aid.String(),
+		// 根据更新时间查找，多个更新同时进行时，如果一个人先更新了，后面那个人就无法根据旧时间更新
+		// 一个乐观锁模型
+		mgutil.UpdatedAtFieldName: updatedAt,
+	}, mgutil.Set(bson.M{
+		tripField: trip,
+		// 同时更新时间，保证多个更新同时进行时，旧的那个更新失败
+		mgutil.UpdatedAtFieldName: newUpdatedAt,
+	}))
+	if err != nil {
+		return err
+	}
+	if res.MatchedCount == 0 {
+		return mongo.ErrNoDocuments
+	}
+	return nil
 }
