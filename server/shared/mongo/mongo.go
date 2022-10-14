@@ -22,8 +22,10 @@ type UpdatedAtField struct {
 	UpdateAt int64 `bson:"updatedat"`
 }
 
+// 正常使用时，从 mongodb 库提供的生成 objID 的函数中获取 id
 var NewObjID = primitive.NewObjectID
 
+// 测试使用时，返回提供的 objID，以固化测试时的随机值
 func NewObjectIDWithValue(id fmt.Stringer) {
 	NewObjID = func() primitive.ObjectID {
 		return objid.MustFromID(id)

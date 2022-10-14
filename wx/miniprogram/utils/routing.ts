@@ -6,10 +6,10 @@ export namespace routing {
         return `/pages/driving/driving?trip_id=${o.tripID}`
     }
     export interface LockOpts {
-        carID: string
+        car_id: string
     }
     export function lock(o: LockOpts) {
-        return `/pages/lock/lock?car_id=${o.carID}`
+        return `/pages/lock/lock?car_id=${o.car_id}`
     }
     export interface RegisterOpts {
         redirectURL?: string

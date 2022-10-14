@@ -1,3 +1,4 @@
+import { IAppOption } from "../../appoption"
 import { routing } from "../../utils/routing"
 
 Page({
@@ -111,11 +112,11 @@ Page({
         await this.selectComponent('#licModal').showModal()
         // TODO: 从二维码中获取car_id
         // 模拟已经获得car_id
-        const carID = 'car_123'
+        const car_id = 'car_123'
 
         // 指示register页面接下来跳转到lock页面
         const redirectURL = routing.lock({
-          carID: carID,
+          car_id: car_id,
         })
 
         // navigateTo跳转至新页面，当前页面会保留，可退回

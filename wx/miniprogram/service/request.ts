@@ -22,8 +22,7 @@ export namespace Coolcar {
         retryOnAuthError: boolean
     }
 
-    export async function sendRequestWithAuthRetry<REQ extends string | AnyObject | ArrayBuffer | undefined,
-        RES>(o: RequestOption<REQ, RES>, a?: AuthOption): Promise<RES> {
+    export async function sendRequestWithAuthRetry<REQ, RES>(o: RequestOption<REQ, RES>, a?: AuthOption): Promise<RES> {
         const authOpt = a || {
             attachAuthHeader: true,
             retryOnAuthError: true,
@@ -66,8 +65,7 @@ export namespace Coolcar {
         authData.expirMs = reqTimeMs + resp.expirseIn! * 1000
     }
 
-    function sendRequest<REQ extends string | AnyObject | ArrayBuffer | undefined,
-        RES>(o: RequestOption<REQ, RES>, a: AuthOption): Promise<RES> {
+    function sendRequest<REQ, RES>(o: RequestOption<REQ, RES>, a: AuthOption): Promise<RES> {
         const authOpt = a || {
             attachAuthHeader: true,
         }

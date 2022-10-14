@@ -1,3 +1,4 @@
+import { IAppOption } from "../../appoption"
 import { TripService } from "../../service/trip"
 import { routing } from "../../utils/routing"
 
@@ -8,6 +9,7 @@ Page({
   /**
    * 页面的初始数据
    */
+  car_id: "",
   data: {
     isShareLocation: false,
     userInfo: {} as WechatMiniprogram.UserInfo,
@@ -47,7 +49,8 @@ Page({
     // 获取位置信息权限，为后续行程页面做准备
     wx.getLocation({
       type: 'gcj02',
-      success: loc => {
+      success: async loc => {
+        console.log(loc)
         // TODO: 向后端传输数据，创建行程
         // 模拟创建行程
         console.log('starting a trip', {
@@ -57,24 +60,34 @@ Page({
           },
           // TODO: 需要数据的双向绑定
           avatarURL: this.data.isShareLocation ? this.data.userInfo.avatarUrl : '',
-          carID: '123456',
+          car_id: '123456',
         })
-        TripService.CreateTrip({
-          start: "abc"
+        if (!this.car_id) {
+          console.error("no car_id specified")
+          return
+        }
+        const trip = await TripService.CreateTrip({
+          start: {
+            latitude: loc.latitude,
+            longitude: loc.longitude,
+          },
+          carId: this.car_id,
         })
-        return
-        const tripID = 'trip_456'
         // 显示一个开锁中提示
         wx.showLoading({
           title: '开锁中',
           // 为页面覆盖一个透明的罩子，避免开锁中时点击到其他元素
           mask: true,
         })
+        if (!trip.id) {
+          console.error("no tripID in response", trip)
+          return
+        }
         // 模拟汽车开锁等待时间
         setTimeout(() => {
           wx.redirectTo({
             url: routing.driving({
-              tripID: tripID,
+              tripID: trip.id!,
             }),
             complete: () => {
               wx.hideLoading()
@@ -95,9 +108,10 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(opt: Record<'carID', string>) {
+  onLoad(opt: Record<'car_id', string>) {
     const o: routing.LockOpts = opt
-    console.log("unlocking car", o.carID)
+    this.car_id = o.car_id
+    console.log("car_id =", this.car_id)
     // 每次打开小程序时，就去获取是否分享行程这个值
     // 如果没有这个值，则默认设置为true
     // 有则取本地值

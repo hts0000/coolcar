@@ -32,7 +32,7 @@ func main() {
 		logger.Fatal("cannot connect mongodb", zap.Error(err))
 	}
 
-	pkFp, err := os.Open("private.key")
+	pkFp, err := os.Open("auth/private.key")
 	if err != nil {
 		logger.Fatal("cannot open private key file", zap.Error(err))
 	}
