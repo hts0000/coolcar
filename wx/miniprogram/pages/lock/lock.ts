@@ -87,7 +87,7 @@ Page({
         setTimeout(() => {
           wx.redirectTo({
             url: routing.driving({
-              tripID: trip.id!,
+              trip_id: trip.id!,
             }),
             complete: () => {
               wx.hideLoading()

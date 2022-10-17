@@ -14,7 +14,9 @@ import (
 	"os"
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/testing/protocmp"
 )
 
 func TestCreateTrip(t *testing.T) {
@@ -111,6 +113,172 @@ func TestCreateTrip(t *testing.T) {
 			got := string(b)
 			if cc.want != got {
 				t.Errorf("%s: incorrect response: want %s, got %s", cc.name, cc.want, got)
+			}
+		})
+	}
+}
+
+func TestGetTrip(t *testing.T) {
+	mc, err := mongotesting.NewClient(context.Background())
+	if err != nil {
+		t.Fatalf("cannot create mongo client: %v", err)
+	}
+
+	logger, err := zap.NewDevelopment()
+	if err != nil {
+		t.Fatalf("cannot create logger: %v", err)
+	}
+
+	pm := profileManager{}
+	cm := carManager{}
+	s := &Service{
+		ProfileManager: &pm,
+		CarManager:     &cm,
+		POIManager:     &poi.Manager{},
+		Mongo:          dao.NewMongo(mc.Database("coolcar")),
+		Logger:         logger,
+	}
+
+	cases := []struct {
+		name    string
+		aid     id.AccountID
+		tripID  id.TripID
+		wantErr bool
+	}{
+		{
+			name: "normal_get",
+			aid:  "account2",
+		},
+		{
+			name:    "error_get",
+			aid:     "account2",
+			tripID:  id.TripID("NON-EXIST_TRIP_ID"),
+			wantErr: true,
+		},
+	}
+
+	for _, cc := range cases {
+		t.Run(cc.name, func(t *testing.T) {
+			c := auth.ContextWithAccountID(context.Background(), cc.aid)
+			tr, err := s.CreateTrip(c, &rentalpb.CreateTripRequest{CarId: "car_1"})
+			if err != nil {
+				t.Fatalf("%s: cannot create trip: %v", cc.name, err)
+			}
+			req := &rentalpb.GetTripRequest{
+				Id: tr.Id,
+			}
+			if cc.tripID != "" {
+				req.Id = cc.tripID.String()
+			}
+			trip, err := s.GetTrip(c, req)
+			if cc.wantErr {
+				if err == nil {
+					t.Fatalf("%s: want error; got none", cc.name)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("%s: cannot get trip: %v", cc.name, err)
+			}
+			if diff := cmp.Diff(tr.Trip, trip, protocmp.Transform()); diff != "" {
+				// -号的行是期望得到的
+				// +号的行是得到的行
+				t.Errorf("result differs: -want +got: %s", diff)
+			}
+		})
+	}
+}
+
+func TestGetTrips(t *testing.T) {
+	mc, err := mongotesting.NewClient(context.Background())
+	if err != nil {
+		t.Fatalf("cannot create mongo client: %v", err)
+	}
+
+	logger, err := zap.NewDevelopment()
+	if err != nil {
+		t.Fatalf("cannot create logger: %v", err)
+	}
+
+	pm := profileManager{}
+	cm := carManager{}
+	s := &Service{
+		ProfileManager: &pm,
+		CarManager:     &cm,
+		POIManager:     &poi.Manager{},
+		Mongo:          dao.NewMongo(mc.Database("coolcar")),
+		Logger:         logger,
+	}
+
+	trips := []*rentalpb.Trip{
+		{
+			AccountId: "account3",
+			CarId:     "car_1",
+			Status:    rentalpb.TripStatus_FINISHED,
+		},
+		{
+			AccountId: "account3",
+			CarId:     "car_2",
+			Status:    rentalpb.TripStatus_FINISHED,
+		},
+		{
+			AccountId: "account3",
+			CarId:     "car_3",
+			Status:    rentalpb.TripStatus_IN_PROGRESS,
+		},
+	}
+
+	for _, trip := range trips {
+		c := auth.ContextWithAccountID(context.Background(), id.AccountID(trip.AccountId))
+		_, err := s.Mongo.CreateTrip(c, trip)
+		if err != nil {
+			t.Fatalf("cannot create trip: %v", err)
+		}
+	}
+
+	cases := []struct {
+		name    string
+		aid     id.AccountID
+		status  rentalpb.TripStatus
+		wantCnt int
+	}{
+		{
+			name:    "get_finished",
+			aid:     "account3",
+			status:  rentalpb.TripStatus_FINISHED,
+			wantCnt: 2,
+		},
+		{
+			name:    "get_in_progress",
+			aid:     "account3",
+			status:  rentalpb.TripStatus_IN_PROGRESS,
+			wantCnt: 1,
+		},
+		{
+			name:    "get_all",
+			aid:     "account3",
+			status:  rentalpb.TripStatus_TS_NOT_SPECIFIED,
+			wantCnt: 3,
+		},
+		{
+			name:    "get_none",
+			aid:     "NON-EXIST_ACCOUNT_ID",
+			status:  rentalpb.TripStatus_TS_NOT_SPECIFIED,
+			wantCnt: 0,
+		},
+	}
+
+	for _, cc := range cases {
+		t.Run(cc.name, func(t *testing.T) {
+			c := auth.ContextWithAccountID(context.Background(), id.AccountID(cc.aid))
+			resp, err := s.GetTrips(c, &rentalpb.GetTripsRequest{
+				Status: cc.status,
+			})
+			if err != nil {
+				t.Fatalf("%s: cannot get trips: %v", cc.name, err)
+			}
+			if len(resp.Trips) != cc.wantCnt {
+				t.Fatalf("%s: get trips want cnt %d, got %d", cc.name, cc.wantCnt, len(resp.Trips))
 			}
 		})
 	}

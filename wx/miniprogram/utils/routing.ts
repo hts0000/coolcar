@@ -1,9 +1,9 @@
 export namespace routing {
     export interface DrivingOpts {
-        tripID: string
+        trip_id: string
     }
     export function driving(o: DrivingOpts) {
-        return `/pages/driving/driving?trip_id=${o.tripID}`
+        return `/pages/driving/driving?trip_id=${o.trip_id}`
     }
     export interface LockOpts {
         car_id: string

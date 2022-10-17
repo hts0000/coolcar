@@ -1,3 +1,4 @@
+import { TripService } from "../../service/trip"
 import { routing } from "../../utils/routing"
 
 // 每秒钟0.7分钱
@@ -76,9 +77,12 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(opt: Record<'tripID', string>) {
+  onLoad(opt: Record<'trip_id', string>) {
     const o: routing.DrivingOpts = opt
-    console.log('current trip', o.tripID)
+    console.log('current trip', o.trip_id)
+    // o.trip_id = "634961aaf7c609eb3461bc9e"
+    // 模拟获取
+    TripService.GetTrip(o.trip_id).then(console.log)
     this.setupLocationUpdator()
     this.setupTimer()
   },
