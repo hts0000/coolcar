@@ -11,6 +11,7 @@ import (
 	mongotesting "coolcar/shared/mongo/testing"
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"os"
 	"testing"
 
@@ -20,26 +21,11 @@ import (
 )
 
 func TestCreateTrip(t *testing.T) {
-	c := auth.ContextWithAccountID(context.Background(), id.AccountID("account1"))
-	mc, err := mongotesting.NewClient(c)
-	if err != nil {
-		t.Fatalf("cannot create mongo client: %v", err)
-	}
+	c := context.Background()
 
-	logger, err := zap.NewDevelopment()
-	if err != nil {
-		t.Fatalf("cannot create logger: %v", err)
-	}
-
-	pm := profileManager{}
-	cm := carManager{}
-	s := &Service{
-		ProfileManager: &pm,
-		CarManager:     &cm,
-		POIManager:     &poi.Manager{},
-		Mongo:          dao.NewMongo(mc.Database("coolcar")),
-		Logger:         logger,
-	}
+	pm := &profileManager{}
+	cm := &carManager{}
+	s := newService(c, t, pm, cm)
 
 	req := &rentalpb.CreateTripRequest{
 		CarId: "car1",
@@ -49,9 +35,13 @@ func TestCreateTrip(t *testing.T) {
 		},
 	}
 	pm.iID = "identity1"
-	golden := `{"account_id":"account1","car_id":"car1","start":{"location":{"latitude":312.12,"longitude":123.123},"poi_name":"迪士尼"},"current":{"location":{"latitude":312.12,"longitude":123.123},"poi_name":"迪士尼"},"status":1,"identity_id":"identity1"}`
+	golden := `{"account_id":%q,"car_id":"car1","start":{"location":{"latitude":312.12,"longitude":123.123},"poi_name":"迪士尼","timestamp_sec":1666017762},"current":{"location":{"latitude":312.12,"longitude":123.123},"poi_name":"迪士尼","timestamp_sec":1666017762},"status":1,"identity_id":"identity1"}`
+	nowFunc = func() int64 {
+		return 1666017762
+	}
 	cases := []struct {
 		name         string
+		aid          id.AccountID
 		tripID       string
 		profileErr   error
 		carVerifyErr error
@@ -61,27 +51,31 @@ func TestCreateTrip(t *testing.T) {
 	}{
 		{
 			name:    "normal_create",
+			aid:     "account1",
 			tripID:  "632b1c6e130f50c2748137aa",
-			want:    golden,
+			want:    fmt.Sprintf(golden, "account1"),
 			wantErr: false,
 		},
 		{
 			name:       "profile_error",
+			aid:        "account2",
 			tripID:     "632b1c6e130f50c2748137ab",
 			profileErr: fmt.Errorf("profile"),
 			wantErr:    true,
 		},
 		{
 			name:         "car_verify_error",
+			aid:          "account3",
 			tripID:       "632b1c6e130f50c2748137ac",
 			carVerifyErr: fmt.Errorf("verify"),
 			wantErr:      true,
 		},
 		{
 			name:         "car_unlock_error",
+			aid:          "account4",
 			tripID:       "632b1c6e130f50c2748137ad",
 			carUnlockErr: fmt.Errorf("unlock"),
-			want:         golden,
+			want:         fmt.Sprintf(golden, "account4"),
 		},
 	}
 
@@ -91,6 +85,7 @@ func TestCreateTrip(t *testing.T) {
 			pm.err = cc.profileErr
 			cm.unlockErr = cc.carUnlockErr
 			cm.verifyErr = cc.carVerifyErr
+			c := auth.ContextWithAccountID(context.Background(), cc.aid)
 			res, err := s.CreateTrip(c, req)
 			if cc.wantErr {
 				if err == nil {
@@ -119,25 +114,9 @@ func TestCreateTrip(t *testing.T) {
 }
 
 func TestGetTrip(t *testing.T) {
-	mc, err := mongotesting.NewClient(context.Background())
-	if err != nil {
-		t.Fatalf("cannot create mongo client: %v", err)
-	}
-
-	logger, err := zap.NewDevelopment()
-	if err != nil {
-		t.Fatalf("cannot create logger: %v", err)
-	}
-
-	pm := profileManager{}
-	cm := carManager{}
-	s := &Service{
-		ProfileManager: &pm,
-		CarManager:     &cm,
-		POIManager:     &poi.Manager{},
-		Mongo:          dao.NewMongo(mc.Database("coolcar")),
-		Logger:         logger,
-	}
+	pm := &profileManager{}
+	cm := &carManager{}
+	s := newService(context.Background(), t, pm, cm)
 
 	cases := []struct {
 		name    string
@@ -147,7 +126,7 @@ func TestGetTrip(t *testing.T) {
 	}{
 		{
 			name: "normal_get",
-			aid:  "account2",
+			aid:  "account1",
 		},
 		{
 			name:    "error_get",
@@ -160,7 +139,10 @@ func TestGetTrip(t *testing.T) {
 	for _, cc := range cases {
 		t.Run(cc.name, func(t *testing.T) {
 			c := auth.ContextWithAccountID(context.Background(), cc.aid)
-			tr, err := s.CreateTrip(c, &rentalpb.CreateTripRequest{CarId: "car_1"})
+			tr, err := s.CreateTrip(c, &rentalpb.CreateTripRequest{
+				CarId: "car_1",
+				Start: &rentalpb.Location{},
+			})
 			if err != nil {
 				t.Fatalf("%s: cannot create trip: %v", cc.name, err)
 			}
@@ -190,25 +172,9 @@ func TestGetTrip(t *testing.T) {
 }
 
 func TestGetTrips(t *testing.T) {
-	mc, err := mongotesting.NewClient(context.Background())
-	if err != nil {
-		t.Fatalf("cannot create mongo client: %v", err)
-	}
-
-	logger, err := zap.NewDevelopment()
-	if err != nil {
-		t.Fatalf("cannot create logger: %v", err)
-	}
-
-	pm := profileManager{}
-	cm := carManager{}
-	s := &Service{
-		ProfileManager: &pm,
-		CarManager:     &cm,
-		POIManager:     &poi.Manager{},
-		Mongo:          dao.NewMongo(mc.Database("coolcar")),
-		Logger:         logger,
-	}
+	pm := &profileManager{}
+	cm := &carManager{}
+	s := newService(context.Background(), t, pm, cm)
 
 	trips := []*rentalpb.Trip{
 		{
@@ -281,6 +247,231 @@ func TestGetTrips(t *testing.T) {
 				t.Fatalf("%s: get trips want cnt %d, got %d", cc.name, cc.wantCnt, len(resp.Trips))
 			}
 		})
+	}
+}
+
+func TestTripLifecycle(t *testing.T) {
+	c := auth.ContextWithAccountID(context.Background(), id.AccountID("account_for_lifecycle"))
+	s := newService(c, t, &profileManager{}, &carManager{})
+
+	tid := id.TripID("632b1c6e140f50c2748137ad")
+	mgutil.NewObjectIDWithValue(tid)
+	cases := []struct {
+		name string
+		now  int64
+		op   func() (*rentalpb.Trip, error)
+		want *rentalpb.Trip
+	}{
+		{
+			name: "create_trip",
+			now:  10000,
+			op: func() (*rentalpb.Trip, error) {
+				e, err := s.CreateTrip(c, &rentalpb.CreateTripRequest{
+					CarId: "car1",
+					Start: &rentalpb.Location{
+						Latitude:  22.213,
+						Longitude: 33.212,
+					},
+				})
+				if err != nil {
+					return nil, err
+				}
+				return e.Trip, nil
+			},
+			want: &rentalpb.Trip{
+				AccountId: "account_for_lifecycle",
+				CarId:     "car1",
+				Start: &rentalpb.LocationStatus{
+					Location: &rentalpb.Location{
+						Latitude:  22.213,
+						Longitude: 33.212,
+					},
+					PoiName:      "天安门",
+					TimestampSec: 10000,
+				},
+				Current: &rentalpb.LocationStatus{
+					Location: &rentalpb.Location{
+						Latitude:  22.213,
+						Longitude: 33.212,
+					},
+					PoiName:      "天安门",
+					TimestampSec: 10000,
+				},
+				Status: rentalpb.TripStatus_IN_PROGRESS,
+			},
+			// `{"account_id":"account_for_lifecycle","car_id":"car1",
+			// "start":{"location":{"latitude":22.213,"longitude":33.212},"poi_name":"天安门","timestamp_sec":10000},
+			// "current":{"location":{"latitude":22.213,"longitude":33.212},"poi_name":"天安门","timestamp_sec":10000},"status":1}`,
+		},
+		{
+			name: "update_trip",
+			now:  20000,
+			op: func() (*rentalpb.Trip, error) {
+				return s.UpdateTrip(c, &rentalpb.UpdateTripRequest{
+					Id: tid.String(),
+					Current: &rentalpb.Location{
+						Latitude:  28.123,
+						Longitude: 312.123,
+					},
+				})
+			},
+			want: &rentalpb.Trip{
+				AccountId: "account_for_lifecycle",
+				CarId:     "car1",
+				Start: &rentalpb.LocationStatus{
+					Location: &rentalpb.Location{
+						Latitude:  22.213,
+						Longitude: 33.212,
+					},
+					PoiName:      "天安门",
+					TimestampSec: 10000,
+				},
+				Current: &rentalpb.LocationStatus{
+					Location: &rentalpb.Location{
+						Latitude:  28.123,
+						Longitude: 312.123,
+					},
+					FeeCent:      6828,
+					KmDriven:     262.73474627535245,
+					PoiName:      "中关村",
+					TimestampSec: 20000,
+				},
+				Status: rentalpb.TripStatus_IN_PROGRESS,
+			},
+			// `{"account_id":"account_for_lifecycle","car_id":"car1",
+			// "start":{"location":{"latitude":22.213,"longitude":33.212},"poi_name":"天安门","timestamp_sec":10000},
+			// "current":{"location":{"latitude":28.123,"longitude":312.123},"fee_cent":6828,"km_driven":262.73474627535245,"poi_name":"中关村","timestamp_sec":20000},"status":1}`,
+		},
+		{
+			name: "finish_trip",
+			now:  30000,
+			op: func() (*rentalpb.Trip, error) {
+				return s.UpdateTrip(c, &rentalpb.UpdateTripRequest{
+					Id:      tid.String(),
+					EndTrip: true,
+				})
+			},
+			want: &rentalpb.Trip{
+				AccountId: "account_for_lifecycle",
+				CarId:     "car1",
+				Start: &rentalpb.LocationStatus{
+					Location: &rentalpb.Location{
+						Latitude:  22.213,
+						Longitude: 33.212,
+					},
+					PoiName:      "天安门",
+					TimestampSec: 10000,
+				},
+				Current: &rentalpb.LocationStatus{
+					Location: &rentalpb.Location{
+						Latitude:  28.123,
+						Longitude: 312.123,
+					},
+					FeeCent:      6929,
+					KmDriven:     340.34172200547056,
+					PoiName:      "中关村",
+					TimestampSec: 30000,
+				},
+				End: &rentalpb.LocationStatus{
+					Location: &rentalpb.Location{
+						Latitude:  28.123,
+						Longitude: 312.123,
+					},
+					FeeCent:      6929,
+					KmDriven:     340.34172200547056,
+					PoiName:      "中关村",
+					TimestampSec: 30000,
+				},
+				Status: rentalpb.TripStatus_FINISHED,
+			},
+			//`{"account_id":"account_for_lifecycle","car_id":"car1",
+			// "start":{"location":{"latitude":22.213,"longitude":33.212},"poi_name":"天安门","timestamp_sec":10000},
+			// "current":{"location":{"latitude":28.123,"longitude":312.123},"fee_cent":6929,"km_driven":340.34172200547056,"poi_name":"中关村","timestamp_sec":30000},
+			// "end":{"location":{"latitude":28.123,"longitude":312.123},"fee_cent":6929,"km_driven":340.34172200547056,"poi_name":"中关村","timestamp_sec":30000},"status":2}`,
+		},
+		{
+			name: "query_trip",
+			now:  40000,
+			op: func() (*rentalpb.Trip, error) {
+				return s.GetTrip(c, &rentalpb.GetTripRequest{
+					Id: tid.String(),
+				})
+			},
+			want: &rentalpb.Trip{
+				AccountId: "account_for_lifecycle",
+				CarId:     "car1",
+				Start: &rentalpb.LocationStatus{
+					Location: &rentalpb.Location{
+						Latitude:  22.213,
+						Longitude: 33.212,
+					},
+					PoiName:      "天安门",
+					TimestampSec: 10000,
+				},
+				Current: &rentalpb.LocationStatus{
+					Location: &rentalpb.Location{
+						Latitude:  28.123,
+						Longitude: 312.123,
+					},
+					FeeCent:      6929,
+					KmDriven:     340.34172200547056,
+					PoiName:      "中关村",
+					TimestampSec: 30000,
+				},
+				End: &rentalpb.LocationStatus{
+					Location: &rentalpb.Location{
+						Latitude:  28.123,
+						Longitude: 312.123,
+					},
+					FeeCent:      6929,
+					KmDriven:     340.34172200547056,
+					PoiName:      "中关村",
+					TimestampSec: 30000,
+				},
+				Status: rentalpb.TripStatus_FINISHED,
+			},
+			// `{"account_id":"account_for_lifecycle","car_id":"car1",
+			// "start":{"location":{"latitude":22.213,"longitude":33.212},"poi_name":"天安门","timestamp_sec":10000},
+			// "current":{"location":{"latitude":28.123,"longitude":312.123},"fee_cent":6929,"km_driven":340.34172200547056,"poi_name":"中关村","timestamp_sec":30000},
+			// "end":{"location":{"latitude":28.123,"longitude":312.123},"fee_cent":6929,"km_driven":340.34172200547056,"poi_name":"中关村","timestamp_sec":30000},"status":2}`,
+		},
+	}
+	rand.Seed(1314)
+	for _, cc := range cases {
+		nowFunc = func() int64 {
+			return cc.now
+		}
+		got, err := cc.op()
+		if err != nil {
+			t.Errorf("%s: operation failed: %v", cc.name, err)
+			continue
+		}
+		if diff := cmp.Diff(got, cc.want, protocmp.Transform()); diff != "" {
+			// -号的行是期望得到的
+			// +号的行是得到的行
+			t.Errorf("result differs: -want +got: %s", diff)
+		}
+	}
+}
+
+func newService(c context.Context, t *testing.T, pm ProfileManager, cm CarManager) *Service {
+	mc, err := mongotesting.NewClient(context.Background())
+	if err != nil {
+		t.Fatalf("cannot create mongo client: %v", err)
+	}
+
+	logger, err := zap.NewDevelopment()
+	if err != nil {
+		t.Fatalf("cannot create logger: %v", err)
+	}
+	db := mc.Database("coolcar")
+	mongotesting.SetupIndexs(c, db)
+	return &Service{
+		ProfileManager: pm,
+		CarManager:     cm,
+		POIManager:     &poi.Manager{},
+		Mongo:          dao.NewMongo(db),
+		Logger:         logger,
 	}
 }
 

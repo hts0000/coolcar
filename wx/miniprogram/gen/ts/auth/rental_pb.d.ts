@@ -9,10 +9,10 @@ export namespace rental {
         interface ILocation {
 
             /** Location latitude */
-            latitude?: (number|null);
+            latitude?: (number | null);
 
             /** Location longitude */
-            longitude?: (number|null);
+            longitude?: (number | null);
         }
 
         /** Represents a Location. */
@@ -38,7 +38,7 @@ export namespace rental {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): rental.v1.Location;
+            public static decode(reader: ($protobuf.Reader | Uint8Array), length?: number): rental.v1.Location;
 
             /**
              * Creates a Location message from a plain object. Also converts values to their respective internal types.
@@ -73,16 +73,19 @@ export namespace rental {
         interface ILocationStatus {
 
             /** LocationStatus location */
-            location?: (rental.v1.ILocation|null);
+            location?: (rental.v1.ILocation | null);
 
             /** LocationStatus feeCent */
-            feeCent?: (number|null);
+            feeCent?: (number | null);
 
             /** LocationStatus kmDriven */
-            kmDriven?: (number|null);
+            kmDriven?: (number | null);
 
             /** LocationStatus poiName */
-            poiName?: (string|null);
+            poiName?: (string | null);
+
+            /** LocationStatus timestampSec */
+            timestampSec?: (number | $protobuf.Long | null);
         }
 
         /** Represents a LocationStatus. */
@@ -95,7 +98,7 @@ export namespace rental {
             constructor(properties?: rental.v1.ILocationStatus);
 
             /** LocationStatus location. */
-            public location?: (rental.v1.ILocation|null);
+            public location?: (rental.v1.ILocation | null);
 
             /** LocationStatus feeCent. */
             public feeCent: number;
@@ -106,6 +109,9 @@ export namespace rental {
             /** LocationStatus poiName. */
             public poiName: string;
 
+            /** LocationStatus timestampSec. */
+            public timestampSec: (number | $protobuf.Long);
+
             /**
              * Decodes a LocationStatus message from the specified reader or buffer.
              * @param reader Reader or buffer to decode from
@@ -114,7 +120,7 @@ export namespace rental {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): rental.v1.LocationStatus;
+            public static decode(reader: ($protobuf.Reader | Uint8Array), length?: number): rental.v1.LocationStatus;
 
             /**
              * Creates a LocationStatus message from a plain object. Also converts values to their respective internal types.
@@ -156,10 +162,10 @@ export namespace rental {
         interface ITripEntity {
 
             /** TripEntity id */
-            id?: (string|null);
+            id?: (string | null);
 
             /** TripEntity trip */
-            trip?: (rental.v1.ITrip|null);
+            trip?: (rental.v1.ITrip | null);
         }
 
         /** Represents a TripEntity. */
@@ -175,7 +181,7 @@ export namespace rental {
             public id: string;
 
             /** TripEntity trip. */
-            public trip?: (rental.v1.ITrip|null);
+            public trip?: (rental.v1.ITrip | null);
 
             /**
              * Decodes a TripEntity message from the specified reader or buffer.
@@ -185,7 +191,7 @@ export namespace rental {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): rental.v1.TripEntity;
+            public static decode(reader: ($protobuf.Reader | Uint8Array), length?: number): rental.v1.TripEntity;
 
             /**
              * Creates a TripEntity message from a plain object. Also converts values to their respective internal types.
@@ -220,25 +226,25 @@ export namespace rental {
         interface ITrip {
 
             /** Trip accountId */
-            accountId?: (string|null);
+            accountId?: (string | null);
 
             /** Trip carId */
-            carId?: (string|null);
+            carId?: (string | null);
 
             /** Trip start */
-            start?: (rental.v1.ILocationStatus|null);
+            start?: (rental.v1.ILocationStatus | null);
 
             /** Trip current */
-            current?: (rental.v1.ILocationStatus|null);
+            current?: (rental.v1.ILocationStatus | null);
 
             /** Trip end */
-            end?: (rental.v1.ILocationStatus|null);
+            end?: (rental.v1.ILocationStatus | null);
 
             /** Trip status */
-            status?: (rental.v1.TripStatus|null);
+            status?: (rental.v1.TripStatus | null);
 
             /** Trip identityId */
-            identityId?: (string|null);
+            identityId?: (string | null);
         }
 
         /** Represents a Trip. */
@@ -257,13 +263,13 @@ export namespace rental {
             public carId: string;
 
             /** Trip start. */
-            public start?: (rental.v1.ILocationStatus|null);
+            public start?: (rental.v1.ILocationStatus | null);
 
             /** Trip current. */
-            public current?: (rental.v1.ILocationStatus|null);
+            public current?: (rental.v1.ILocationStatus | null);
 
             /** Trip end. */
-            public end?: (rental.v1.ILocationStatus|null);
+            public end?: (rental.v1.ILocationStatus | null);
 
             /** Trip status. */
             public status: rental.v1.TripStatus;
@@ -279,7 +285,7 @@ export namespace rental {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): rental.v1.Trip;
+            public static decode(reader: ($protobuf.Reader | Uint8Array), length?: number): rental.v1.Trip;
 
             /**
              * Creates a Trip message from a plain object. Also converts values to their respective internal types.
@@ -314,10 +320,10 @@ export namespace rental {
         interface ICreateTripRequest {
 
             /** CreateTripRequest start */
-            start?: (rental.v1.ILocation|null);
+            start?: (rental.v1.ILocation | null);
 
             /** CreateTripRequest carId */
-            carId?: (string|null);
+            carId?: (string | null);
         }
 
         /** Represents a CreateTripRequest. */
@@ -330,7 +336,7 @@ export namespace rental {
             constructor(properties?: rental.v1.ICreateTripRequest);
 
             /** CreateTripRequest start. */
-            public start?: (rental.v1.ILocation|null);
+            public start?: (rental.v1.ILocation | null);
 
             /** CreateTripRequest carId. */
             public carId: string;
@@ -343,7 +349,7 @@ export namespace rental {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): rental.v1.CreateTripRequest;
+            public static decode(reader: ($protobuf.Reader | Uint8Array), length?: number): rental.v1.CreateTripRequest;
 
             /**
              * Creates a CreateTripRequest message from a plain object. Also converts values to their respective internal types.
@@ -378,7 +384,7 @@ export namespace rental {
         interface IGetTripRequest {
 
             /** GetTripRequest id */
-            id?: (string|null);
+            id?: (string | null);
         }
 
         /** Represents a GetTripRequest. */
@@ -401,7 +407,7 @@ export namespace rental {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): rental.v1.GetTripRequest;
+            public static decode(reader: ($protobuf.Reader | Uint8Array), length?: number): rental.v1.GetTripRequest;
 
             /**
              * Creates a GetTripRequest message from a plain object. Also converts values to their respective internal types.
@@ -436,7 +442,7 @@ export namespace rental {
         interface IGetTripsRequest {
 
             /** GetTripsRequest status */
-            status?: (rental.v1.TripStatus|null);
+            status?: (rental.v1.TripStatus | null);
         }
 
         /** Represents a GetTripsRequest. */
@@ -459,7 +465,7 @@ export namespace rental {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): rental.v1.GetTripsRequest;
+            public static decode(reader: ($protobuf.Reader | Uint8Array), length?: number): rental.v1.GetTripsRequest;
 
             /**
              * Creates a GetTripsRequest message from a plain object. Also converts values to their respective internal types.
@@ -494,7 +500,7 @@ export namespace rental {
         interface IGetTripsResponse {
 
             /** GetTripsResponse trips */
-            trips?: (rental.v1.ITripEntity[]|null);
+            trips?: (rental.v1.ITripEntity[] | null);
         }
 
         /** Represents a GetTripsResponse. */
@@ -517,7 +523,7 @@ export namespace rental {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): rental.v1.GetTripsResponse;
+            public static decode(reader: ($protobuf.Reader | Uint8Array), length?: number): rental.v1.GetTripsResponse;
 
             /**
              * Creates a GetTripsResponse message from a plain object. Also converts values to their respective internal types.
@@ -552,13 +558,13 @@ export namespace rental {
         interface IUpdateTripRequest {
 
             /** UpdateTripRequest id */
-            id?: (string|null);
+            id?: (string | null);
 
             /** UpdateTripRequest current */
-            current?: (rental.v1.ILocation|null);
+            current?: (rental.v1.ILocation | null);
 
             /** UpdateTripRequest endTrip */
-            endTrip?: (boolean|null);
+            endTrip?: (boolean | null);
         }
 
         /** Represents an UpdateTripRequest. */
@@ -574,7 +580,7 @@ export namespace rental {
             public id: string;
 
             /** UpdateTripRequest current. */
-            public current?: (rental.v1.ILocation|null);
+            public current?: (rental.v1.ILocation | null);
 
             /** UpdateTripRequest endTrip. */
             public endTrip: boolean;
@@ -587,7 +593,7 @@ export namespace rental {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): rental.v1.UpdateTripRequest;
+            public static decode(reader: ($protobuf.Reader | Uint8Array), length?: number): rental.v1.UpdateTripRequest;
 
             /**
              * Creates an UpdateTripRequest message from a plain object. Also converts values to their respective internal types.
@@ -693,28 +699,28 @@ export namespace rental {
              * @param error Error, if any
              * @param [response] TripEntity
              */
-            type CreateTripCallback = (error: (Error|null), response?: rental.v1.TripEntity) => void;
+            type CreateTripCallback = (error: (Error | null), response?: rental.v1.TripEntity) => void;
 
             /**
              * Callback as used by {@link rental.v1.TripService#getTrip}.
              * @param error Error, if any
              * @param [response] Trip
              */
-            type GetTripCallback = (error: (Error|null), response?: rental.v1.Trip) => void;
+            type GetTripCallback = (error: (Error | null), response?: rental.v1.Trip) => void;
 
             /**
              * Callback as used by {@link rental.v1.TripService#getTrips}.
              * @param error Error, if any
              * @param [response] GetTripsResponse
              */
-            type GetTripsCallback = (error: (Error|null), response?: rental.v1.GetTripsResponse) => void;
+            type GetTripsCallback = (error: (Error | null), response?: rental.v1.GetTripsResponse) => void;
 
             /**
              * Callback as used by {@link rental.v1.TripService#updateTrip}.
              * @param error Error, if any
              * @param [response] Trip
              */
-            type UpdateTripCallback = (error: (Error|null), response?: rental.v1.Trip) => void;
+            type UpdateTripCallback = (error: (Error | null), response?: rental.v1.Trip) => void;
         }
 
         /** Gender enum. */
@@ -735,10 +741,10 @@ export namespace rental {
         interface IProfile {
 
             /** Profile identity */
-            identity?: (rental.v1.IIdentity|null);
+            identity?: (rental.v1.IIdentity | null);
 
             /** Profile identityStatus */
-            identityStatus?: (rental.v1.IdentityStatus|null);
+            identityStatus?: (rental.v1.IdentityStatus | null);
         }
 
         /** Represents a Profile. */
@@ -751,7 +757,7 @@ export namespace rental {
             constructor(properties?: rental.v1.IProfile);
 
             /** Profile identity. */
-            public identity?: (rental.v1.IIdentity|null);
+            public identity?: (rental.v1.IIdentity | null);
 
             /** Profile identityStatus. */
             public identityStatus: rental.v1.IdentityStatus;
@@ -764,7 +770,7 @@ export namespace rental {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): rental.v1.Profile;
+            public static decode(reader: ($protobuf.Reader | Uint8Array), length?: number): rental.v1.Profile;
 
             /**
              * Creates a Profile message from a plain object. Also converts values to their respective internal types.
@@ -799,16 +805,16 @@ export namespace rental {
         interface IIdentity {
 
             /** Identity licNumber */
-            licNumber?: (string|null);
+            licNumber?: (string | null);
 
             /** Identity name */
-            name?: (string|null);
+            name?: (string | null);
 
             /** Identity gender */
-            gender?: (rental.v1.Gender|null);
+            gender?: (rental.v1.Gender | null);
 
             /** Identity birthDateNillis */
-            birthDateNillis?: (number|Long|null);
+            birthDateNillis?: (number | $protobuf.Long | null);
         }
 
         /** Represents an Identity. */
@@ -830,7 +836,7 @@ export namespace rental {
             public gender: rental.v1.Gender;
 
             /** Identity birthDateNillis. */
-            public birthDateNillis: (number|Long);
+            public birthDateNillis: (number | $protobuf.Long);
 
             /**
              * Decodes an Identity message from the specified reader or buffer.
@@ -840,7 +846,7 @@ export namespace rental {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): rental.v1.Identity;
+            public static decode(reader: ($protobuf.Reader | Uint8Array), length?: number): rental.v1.Identity;
 
             /**
              * Creates an Identity message from a plain object. Also converts values to their respective internal types.
@@ -892,7 +898,7 @@ export namespace rental {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): rental.v1.GetProfileRequest;
+            public static decode(reader: ($protobuf.Reader | Uint8Array), length?: number): rental.v1.GetProfileRequest;
 
             /**
              * Creates a GetProfileRequest message from a plain object. Also converts values to their respective internal types.
@@ -944,7 +950,7 @@ export namespace rental {
              * @throws {Error} If the payload is not a reader or valid buffer
              * @throws {$protobuf.util.ProtocolError} If required fields are missing
              */
-            public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): rental.v1.ClearProfileRequest;
+            public static decode(reader: ($protobuf.Reader | Uint8Array), length?: number): rental.v1.ClearProfileRequest;
 
             /**
              * Creates a ClearProfileRequest message from a plain object. Also converts values to their respective internal types.
@@ -1036,21 +1042,21 @@ export namespace rental {
              * @param error Error, if any
              * @param [response] Profile
              */
-            type GetProfileCallback = (error: (Error|null), response?: rental.v1.Profile) => void;
+            type GetProfileCallback = (error: (Error | null), response?: rental.v1.Profile) => void;
 
             /**
              * Callback as used by {@link rental.v1.ProfileService#submitProfile}.
              * @param error Error, if any
              * @param [response] Profile
              */
-            type SubmitProfileCallback = (error: (Error|null), response?: rental.v1.Profile) => void;
+            type SubmitProfileCallback = (error: (Error | null), response?: rental.v1.Profile) => void;
 
             /**
              * Callback as used by {@link rental.v1.ProfileService#clearProfile}.
              * @param error Error, if any
              * @param [response] Profile
              */
-            type ClearProfileCallback = (error: (Error|null), response?: rental.v1.Profile) => void;
+            type ClearProfileCallback = (error: (Error | null), response?: rental.v1.Profile) => void;
         }
     }
 }
