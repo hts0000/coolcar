@@ -1914,7 +1914,7 @@ export const rental = $root.rental = (() => {
              * @property {string|null} [licNumber] Identity licNumber
              * @property {string|null} [name] Identity name
              * @property {rental.v1.Gender|null} [gender] Identity gender
-             * @property {number|Long|null} [birthDateNillis] Identity birthDateNillis
+             * @property {number|Long|null} [birthDateMillis] Identity birthDateMillis
              */
 
             /**
@@ -1957,12 +1957,12 @@ export const rental = $root.rental = (() => {
             Identity.prototype.gender = 0;
 
             /**
-             * Identity birthDateNillis.
-             * @member {number|Long} birthDateNillis
+             * Identity birthDateMillis.
+             * @member {number|Long} birthDateMillis
              * @memberof rental.v1.Identity
              * @instance
              */
-            Identity.prototype.birthDateNillis = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
+            Identity.prototype.birthDateMillis = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
 
             /**
              * Decodes an Identity message from the specified reader or buffer.
@@ -1995,7 +1995,7 @@ export const rental = $root.rental = (() => {
                             break;
                         }
                         case 4: {
-                            message.birthDateNillis = reader.int64();
+                            message.birthDateMillis = reader.int64();
                             break;
                         }
                         default:
@@ -2042,15 +2042,15 @@ export const rental = $root.rental = (() => {
                         message.gender = 2;
                         break;
                 }
-                if (object.birthDateNillis != null)
+                if (object.birthDateMillis != null)
                     if ($util.Long)
-                        (message.birthDateNillis = $util.Long.fromValue(object.birthDateNillis)).unsigned = false;
-                    else if (typeof object.birthDateNillis === "string")
-                        message.birthDateNillis = parseInt(object.birthDateNillis, 10);
-                    else if (typeof object.birthDateNillis === "number")
-                        message.birthDateNillis = object.birthDateNillis;
-                    else if (typeof object.birthDateNillis === "object")
-                        message.birthDateNillis = new $util.LongBits(object.birthDateNillis.low >>> 0, object.birthDateNillis.high >>> 0).toNumber();
+                        (message.birthDateMillis = $util.Long.fromValue(object.birthDateMillis)).unsigned = false;
+                    else if (typeof object.birthDateMillis === "string")
+                        message.birthDateMillis = parseInt(object.birthDateMillis, 10);
+                    else if (typeof object.birthDateMillis === "number")
+                        message.birthDateMillis = object.birthDateMillis;
+                    else if (typeof object.birthDateMillis === "object")
+                        message.birthDateMillis = new $util.LongBits(object.birthDateMillis.low >>> 0, object.birthDateMillis.high >>> 0).toNumber();
                 return message;
             };
 
@@ -2073,9 +2073,9 @@ export const rental = $root.rental = (() => {
                     object.gender = options.enums === String ? "G_NOT_SPECIFIED" : 0;
                     if ($util.Long) {
                         let long = new $util.Long(0, 0, false);
-                        object.birthDateNillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                        object.birthDateMillis = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
                     } else
-                        object.birthDateNillis = options.longs === String ? "0" : 0;
+                        object.birthDateMillis = options.longs === String ? "0" : 0;
                 }
                 if (message.licNumber != null && message.hasOwnProperty("licNumber"))
                     object.licNumber = message.licNumber;
@@ -2083,11 +2083,11 @@ export const rental = $root.rental = (() => {
                     object.name = message.name;
                 if (message.gender != null && message.hasOwnProperty("gender"))
                     object.gender = options.enums === String ? $root.rental.v1.Gender[message.gender] === undefined ? message.gender : $root.rental.v1.Gender[message.gender] : message.gender;
-                if (message.birthDateNillis != null && message.hasOwnProperty("birthDateNillis"))
-                    if (typeof message.birthDateNillis === "number")
-                        object.birthDateNillis = options.longs === String ? String(message.birthDateNillis) : message.birthDateNillis;
+                if (message.birthDateMillis != null && message.hasOwnProperty("birthDateMillis"))
+                    if (typeof message.birthDateMillis === "number")
+                        object.birthDateMillis = options.longs === String ? String(message.birthDateMillis) : message.birthDateMillis;
                     else
-                        object.birthDateNillis = options.longs === String ? $util.Long.prototype.toString.call(message.birthDateNillis) : options.longs === Number ? new $util.LongBits(message.birthDateNillis.low >>> 0, message.birthDateNillis.high >>> 0).toNumber() : message.birthDateNillis;
+                        object.birthDateMillis = options.longs === String ? $util.Long.prototype.toString.call(message.birthDateMillis) : options.longs === Number ? new $util.LongBits(message.birthDateMillis.low >>> 0, message.birthDateMillis.high >>> 0).toNumber() : message.birthDateMillis;
                 return object;
             };
 

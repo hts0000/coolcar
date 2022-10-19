@@ -108,7 +108,7 @@ message Identity {
     string lic_number = 1;
     string name = 2;
     Gender gender = 3;
-    int64 birth_date_nillis = 4;
+    int64 birth_date_millis = 4;
 }
 
 message GetProfileRequest {}

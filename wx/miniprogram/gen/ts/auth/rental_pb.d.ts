@@ -813,8 +813,8 @@ export namespace rental {
             /** Identity gender */
             gender?: (rental.v1.Gender | null);
 
-            /** Identity birthDateNillis */
-            birthDateNillis?: (number | $protobuf.Long | null);
+            /** Identity birthDateMillis */
+            birthDateMillis?: (number | $protobuf.Long | null);
         }
 
         /** Represents an Identity. */
@@ -835,8 +835,8 @@ export namespace rental {
             /** Identity gender. */
             public gender: rental.v1.Gender;
 
-            /** Identity birthDateNillis. */
-            public birthDateNillis: (number | $protobuf.Long);
+            /** Identity birthDateMillis. */
+            public birthDateMillis: (number | $protobuf.Long);
 
             /**
              * Decodes an Identity message from the specified reader or buffer.
