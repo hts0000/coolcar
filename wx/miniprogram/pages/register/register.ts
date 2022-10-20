@@ -1,4 +1,8 @@
+import { rental } from "../../gen/ts/auth/rental_pb"
+import { ProfileService } from "../../service/profile"
 import { routing } from "../../utils/routing"
+import { formatTime } from "../../utils/wxapi";
+import { myFormat } from "../../utils/format";
 
 // pages/register/register.ts
 Page({
@@ -7,6 +11,7 @@ Page({
    * 页面的初始数据
    */
   redirectURL: '',
+  profileRefresher: 0,
   data: {
     licNo: '',
     name: '',
@@ -14,7 +19,7 @@ Page({
     genders: ['未知', '男', '女', '其他'],
     licImgURL: '',
     birthday: '1999-01-01',
-    state: 'UNSUBMITTED' as 'UNSUBMITTED' | 'PENDING' | 'VERIFIED',
+    state: rental.v1.IdentityStatus[rental.v1.IdentityStatus.UNSUBMITTED],
   },
 
   // 上传驾驶证实现
@@ -45,7 +50,7 @@ Page({
     // 这个只能打印出来看那些是我们想要的数据，再选择
     // console.log(e)
     this.setData({
-      genderIndex: e.detail.value,
+      genderIndex: parseInt(e.detail.value),
     })
   },
 
@@ -58,27 +63,46 @@ Page({
 
   // 上传驾驶证照片至服务器端
   onSubmit() {
-    // TODE: 上传信息至服务端，等待后端返回数据
-    // 未返回期间是PENDING状态，返回成功是VERIFIED状态
-    this.setData({
-      state: 'PENDING',
+    ProfileService.submitProfile({
+      licNumber: this.data.licNo,
+      name: this.data.name,
+      gender: this.data.genderIndex,
+      birthDateMillis: Date.parse(this.data.birthday),
+    }).then(p => {  // 提交审核之后，轮训等待后台审核通过
+      this.renderProfile(p)
+      this.scheduleProfileRefresher()
     })
-    setTimeout(this.onLicVerified, 3000)
+  },
+
+  scheduleProfileRefresher() {
+    // 1s 做一次getProfile请求，检查是否通过审核
+    this.profileRefresher = setInterval(() => {
+      ProfileService.getProfile().then(p => {
+        this.renderProfile(p)
+        if (p.identityStatus !== rental.v1.IdentityStatus.PENDING) {
+          this.clearProfileRefresher()
+        }
+        if (p.identityStatus === rental.v1.IdentityStatus.VERIFIED) {
+          this.onLicVerified()
+        }
+      })
+    }, 1000)
+  },
+
+  clearProfileRefresher() {
+    if (this.profileRefresher) {
+      clearInterval(this.profileRefresher)
+      this.profileRefresher = 0
+    }
   },
 
   // 清掉之前表单的数据，让用户可以重新上传
   onReSubmit() {
-    this.setData({
-      state: 'UNSUBMITTED',
-      licImgURL: '',
-    })
+    ProfileService.clearProfile().then(p => this.renderProfile(p))
   },
 
   // 修改驾驶证认证状态
   onLicVerified() {
-    this.setData({
-      state: 'VERIFIED',
-    })
     // redirect会带上扫码的车辆信息，如果redirect为空，说明不是由租车扫码进入认证页面的
     // 因此留在当前页面即可。如果不为空，说明要租车，跳转至车辆解锁页面。
     if (this.redirectURL) {
@@ -89,6 +113,16 @@ Page({
     }
   },
 
+  renderProfile(p: rental.v1.IProfile) {
+    this.setData({
+      licNo: p.identity?.licNumber || "",
+      name: p.identity?.name || "",
+      genderIndex: p.identity?.gender || 0,
+      birthday: myFormat(formatTime(new Date(p.identity?.birthDateMillis as number || 0))),
+      state: rental.v1.IdentityStatus[p.identityStatus || 0],
+    })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -97,6 +131,7 @@ Page({
     if (o.redirectURL) {
       this.redirectURL = decodeURIComponent(opt.redirectURL)
     }
+    ProfileService.getProfile().then(p => this.renderProfile(p))
   },
 
   /**
@@ -124,7 +159,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
-
+    this.clearProfileRefresher()
   },
 
   /**

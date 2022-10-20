@@ -5,6 +5,7 @@ import (
 	rentalpb "coolcar/rental/api/gen/v1"
 	"coolcar/rental/profile/dao"
 	"coolcar/shared/auth"
+	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.uber.org/zap"
@@ -50,7 +51,17 @@ func (s *Service) SubmitProfile(c context.Context, i *rentalpb.Identity) (*renta
 		s.Logger.Error("cannot update profile", zap.Error(err))
 		return nil, status.Error(codes.Internal, "")
 	}
-
+	// 模拟后台人员认证驾照
+	go func() {
+		time.Sleep(3 * time.Second)
+		err := s.Mongo.UpdateProfile(context.Background(), aid, rentalpb.IdentityStatus_PENDING, &rentalpb.Profile{
+			Identity:       i,
+			IdentityStatus: rentalpb.IdentityStatus_VERIFIED,
+		})
+		if err != nil {
+			s.Logger.Error("cannot verify identity", zap.Error(err))
+		}
+	}()
 	return p, nil
 }
 

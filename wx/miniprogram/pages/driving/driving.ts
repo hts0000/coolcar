@@ -1,27 +1,9 @@
 import { TripService } from "../../service/trip"
+import { formatDuration, formatFare } from "../../utils/format"
 import { routing } from "../../utils/routing"
 
 // 每秒钟0.7分钱
 const centsPerSec = 0.7
-
-// 将时间计数转换成00:00:00的格式
-function formatDuration(sec: number): string {
-  // 如果是个位数，就在前面补上'0'
-  const padString = (n: number) =>
-    n < 10 ? '0' + n.toFixed(0) : n.toFixed(0)
-  const h = Math.floor(sec / 3600)
-  sec -= h * 3600
-  const m = Math.floor(sec / 60)
-  sec -= m * 60
-  const s = Math.floor(sec)
-  return `${padString(h)}:${padString(m)}:${padString(s)}`
-}
-
-// 将分钱数转换成0.00的格式
-// cents是多少分钱
-function formatFare(cents: number): string {
-  return (cents / 100).toFixed(2)
-}
 
 // pages/driving/driving.ts
 Page({
