@@ -12,20 +12,21 @@
       <image class="lic-tmpl-img stretch" src="{{licImgURL}}" />
       <image wx:if="{{state==='VERIFIED'}}" src="/resources/check.png" />
     </view>
-
     <!-- 表单数据 -->
     <view class="lic-form margin-top-xl">
       <view class="cu-form-group">
         <view class="title">驾驶证号</view>
         <!-- state表示驾驶证审查状态，只有处于未审查时，表单可以修改数据 -->
-        <input placeholder="驾驶证号" value="{{licNo}}" disabled="{{state!=='UNSUBMITTED'}}" />
+        <input
+          placeholder="驾驶证号"
+          model:value="{{licNo}}"
+          disabled="{{state!=='UNSUBMITTED'}}"
+        />
       </view>
-
       <view class="cu-form-group">
         <view class="title">姓名</view>
-        <input placeholder="姓名" value="{{name}}" disabled="{{state!=='UNSUBMITTED'}}" />
+        <input placeholder="姓名" model:value="{{name}}" disabled="{{state!=='UNSUBMITTED'}}" />
       </view>
-
       <view class="cu-form-group">
         <view class="title">性别</view>
         <!-- 从range中选择下标为genderIndex的内容显示 -->
@@ -35,12 +36,9 @@
           range="{{genders}}"
           disabled="{{state!=='UNSUBMITTED'}}"
         >
-          <view class="picker">
-            {{genders[genderIndex]}}
-          </view>
+          <view class="picker">{{genders[genderIndex]}}</view>
         </picker>
       </view>
-
       <view class="cu-form-group">
         <view class="title">出生日期</view>
         <picker
@@ -51,9 +49,7 @@
           bindchange="onBirthdayChange"
           disabled="{{state!=='UNSUBMITTED'}}"
         >
-          <view class="picker">
-            {{birthday}}
-          </view>
+          <view class="picker">{{birthday}}</view>
         </picker>
       </view>
     </view>
