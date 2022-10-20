@@ -1,4 +1,7 @@
 import { IAppOption } from "../../appoption"
+import { rental } from "../../gen/ts/auth/rental_pb"
+import { ProfileService } from "../../service/profile"
+import { TripService } from "../../service/trip"
 import { routing } from "../../utils/routing"
 
 Page({
@@ -105,28 +108,47 @@ Page({
   },
 
   // 扫码租车按钮实现
-  onScanTap() {
+  async onScanTap() {
+    // 首先检查有无正在进行中的行程，有则跳转到行程页
+    const trips = await TripService.GetTrips(rental.v1.TripStatus.IN_PROGRESS)
+    if ((trips.trips?.length || 0) > 0) {
+      await this.selectComponent("#tripModal").showModal()
+      wx.navigateTo({
+        url: routing.driving({
+          trip_id: trips.trips![0].id!,
+        }),
+      })
+      return
+    }
     wx.scanCode({
       success: async () => {
-        // 展示一个自定义的对话框，当对话框关闭时，跳转到下一页面
-        await this.selectComponent('#licModal').showModal()
         // TODO: 从二维码中获取car_id
         // 模拟已经获得car_id
         const car_id = 'car_123'
 
         // 指示register页面接下来跳转到lock页面
-        const redirectURL = routing.lock({
+        const lockURL = routing.lock({
           car_id: car_id,
         })
 
-        // navigateTo跳转至新页面，当前页面会保留，可退回
-        // encodeURIComponent将url解析成合法形式（将/、空格之类的转义成%20这种形式）
-        wx.navigateTo({
-          url: routing.register({
-            redirectURL: redirectURL,
-          }),
-        })
+        // 如果已经验证过驾照了，跳转到开锁页
+        const prof = await ProfileService.getProfile()
+        if (prof.identityStatus === rental.v1.IdentityStatus.VERIFIED) {
+          wx.navigateTo({
+            url: lockURL
+          })
+        } else {  // 没有验证过，跳转到验证页面
+          // 展示一个自定义的对话框，当对话框关闭时，跳转到下一页面
+          await this.selectComponent('#licModal').showModal()
 
+          // navigateTo跳转至新页面，当前页面会保留，可退回
+          // encodeURIComponent将url解析成合法形式（将/、空格之类的转义成%20这种形式）
+          wx.navigateTo({
+            url: routing.register({
+              redirectURL: lockURL,
+            }),
+          })
+        }
         // showModal弹出一个对话框
         // wx.showModal({
         //   title: '需要进行驾驶证审核',

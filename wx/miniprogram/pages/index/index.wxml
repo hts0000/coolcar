@@ -23,4 +23,5 @@
     </cover-view>
   </map>
   <modal id="licModal" title="身份认证" contents="需要进行驾驶证审核"></modal>
+  <modal id="tripModal" title="行程中" contents="当前有正在进行的行程，将跳转到行程页面"></modal>
 </view>
