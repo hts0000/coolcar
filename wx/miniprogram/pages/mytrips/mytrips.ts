@@ -1,5 +1,6 @@
 import { IAppOption } from "../../appoption"
 import { rental } from "../../gen/ts/auth/rental_pb"
+import { ProfileService } from "../../service/profile"
 import { TripService } from "../../service/trip"
 import { routing } from "../../utils/routing"
 
@@ -12,6 +13,17 @@ interface Trip {
   distance: string
   status: string
 }
+
+const tripStatusMap = new Map([
+  [rental.v1.TripStatus.IN_PROGRESS, "进行中"],
+  [rental.v1.TripStatus.FINISHED, "已完成"],
+])
+
+const licStatusMap = new Map([
+  [rental.v1.IdentityStatus.UNSUBMITTED, "未认证"],
+  [rental.v1.IdentityStatus.PENDING, "未认证"],
+  [rental.v1.IdentityStatus.VERIFIED, "已认证"],
+])
 
 // pages/mytrips/mytrips.ts
 Page({
@@ -33,6 +45,7 @@ Page({
     nextMargin: '',
     vertical: false,
     current: 0,
+    licStatus: licStatusMap.get(rental.v1.IdentityStatus.UNSUBMITTED),
     promotionItems: [
       {
         img: 'https://img2.mukewang.com/62c64b510001a11117920764.jpg',
@@ -104,7 +117,7 @@ Page({
         duration: '00时38分40秒',
         fee: '128.00元',
         distance: '12.1km',
-        status: '已完成',
+        status: tripStatusMap.get(0)!,
       })
     }
     this.setData({
@@ -149,6 +162,11 @@ Page({
         avatarURL: userInfo?.avatarUrl || '',
       })
     }
+    ProfileService.getProfile().then(p => {
+      this.setData({
+        licStatus: licStatusMap.get(p.identityStatus || 0),
+      })
+    })
   },
 
   /**

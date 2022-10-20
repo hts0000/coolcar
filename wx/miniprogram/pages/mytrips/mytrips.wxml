@@ -33,7 +33,12 @@
       src="/resources/account.png"
       bindtap="getUserProfile"
     />
-    <view class="text-yellow" bindtap="onRegisterTap">驾驶资格未认证</view>
+    <view class="text-yellow" wx:if="{{licStatus==='未认证'}}" bindtap="onRegisterTap">
+      驾驶资格{{licStatus}}
+    </view>
+    <view class="text-green" wx:if="{{licStatus==='已认证'}}" bindtap="onRegisterTap">
+      驾驶资格{{licStatus}}
+    </view>
   </view>
 </view>
 
