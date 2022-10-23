@@ -51,8 +51,8 @@
   >
     <view class="cu-bar solid-bottom padding-right">
       <view class="action">
-        <text wx:if="{{item.status==='已完成'}}" class="cuIcon-title text-green"> </text>
-        <text wx:if="{{item.status==='未完成'}}" class="cuIcon-title text-yellow"> </text>
+        <text wx:if="{{item.status==='已完成'}}" class="cuIcon-title text-grey"> </text>
+        <text wx:if="{{item.status==='进行中'}}" class="cuIcon-title text-green"> </text>
         Tab-{{item.id}}
       </view>
       <view>{{item.status}}</view>
@@ -63,15 +63,15 @@
           <view class="field padding-lr">起</view>
           <view class="value text-black text-bold">{{item.start}}</view>
         </view>
-        <view class="detail-row">
+        <view wx:if="{{!item.inProgress}}" class="detail-row">
           <view class="field padding-lr">终</view>
           <view class="value text-black text-bold">{{item.end}}</view>
         </view>
-        <view class="detail-row">
+        <view wx:if="{{!item.inProgress}}" class="detail-row">
           <view class="field padding-lr">距</view>
           <view class="value text-black text-bold">{{item.distance}}</view>
         </view>
-        <view class="detail-row">
+        <view wx:if="{{!item.inProgress}}" class="detail-row">
           <view class="field padding-lr">时</view>
           <view class="value text-black text-bold">{{item.duration}}</view>
         </view>

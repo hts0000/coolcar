@@ -2,6 +2,7 @@ import { IAppOption } from "../../appoption"
 import { rental } from "../../gen/ts/auth/rental_pb"
 import { ProfileService } from "../../service/profile"
 import { TripService } from "../../service/trip"
+import { formatDuration, formatFare, myFormat } from "../../utils/format"
 import { routing } from "../../utils/routing"
 
 interface Trip {
@@ -12,6 +13,7 @@ interface Trip {
   fee: string
   distance: string
   status: string
+  inProgress: boolean
 }
 
 const tripStatusMap = new Map([
@@ -64,7 +66,7 @@ Page({
         promotionID: 4
       },
     ],
-    trips: [] as Trip[],
+    trips: [] as rental.v1.ITripEntity[],
     tripsHeight: 0,
   },
 
@@ -107,18 +109,28 @@ Page({
     })
   },
 
-  populateTrips() {
+  populateTrips(data: rental.v1.ITripEntity[]) {
     const trips: Trip[] = []
-    for (let i = 0; i < 100; i++) {
-      trips.push({
-        id: (1001 + i).toString(),
-        start: '平安大厦',
-        end: '腾讯大厦',
-        duration: '00时38分40秒',
-        fee: '128.00元',
-        distance: '12.1km',
-        status: tripStatusMap.get(0)!,
-      })
+    for (let i = 0; i < data.length; i++) {
+      let d = data[i].trip
+      if (!d) {
+        continue
+      }
+      const trip: Trip = {
+        id: data[i].id!,
+        start: d.start?.poiName || "未知",
+        end: d.end?.poiName || "未知",
+        duration: formatDuration((d.end?.timestampSec as number) - (d.start?.timestampSec as number)),
+        fee: formatFare(d.end?.feeCent || 0),
+        distance: d.end?.kmDriven?.toFixed(1) + "公里",
+        status: tripStatusMap.get(d.status!) || "未知",
+        inProgress: d.status! === rental.v1.TripStatus.IN_PROGRESS,
+      }
+      if (trip.status === "进行中") {
+        trips.unshift(trip)
+      } else {
+        trips.push(trip)
+      }
     }
     this.setData({
       trips: trips,
@@ -129,9 +141,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   async onLoad() {
-    const res = await TripService.GetTrips(rental.v1.TripStatus.FINISHED)
+    const trs = await TripService.GetTrips()
     // 为垂直滚动栏加载模拟数据
-    this.populateTrips()
+    this.populateTrips(trs.trips)
   },
 
   /**

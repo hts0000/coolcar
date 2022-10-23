@@ -12,6 +12,7 @@ Page({
    * 页面的初始数据
    */
   timer: undefined as number | undefined,
+  tripID: "",
   data: {
     elapsed: "00:00:00",
     fare: "0.00",
@@ -37,6 +38,7 @@ Page({
     })
   },
 
+  // 模拟计费
   setupTimer() {
     let elapsedSec = 0
     let cents = 0
@@ -51,8 +53,16 @@ Page({
   },
 
   onEndTripTap() {
-    wx.redirectTo({
-      url: routing.mytrips(),
+    TripService.FinishTrip(this.tripID).then(() => {
+      wx.redirectTo({
+        url: routing.mytrips(),
+      })
+    }).catch(err => {
+      console.error("end trip failed", err)
+      wx.showToast({
+        title: "结束行程失败",
+        icon: "none",
+      })
     })
   },
 
@@ -61,10 +71,9 @@ Page({
    */
   onLoad(opt: Record<'trip_id', string>) {
     const o: routing.DrivingOpts = opt
-    console.log('current trip', o.trip_id)
-    // o.trip_id = "634961aaf7c609eb3461bc9e"
-    // 模拟获取
-    TripService.GetTrip(o.trip_id).then(console.log)
+    this.tripID = o.trip_id
+    console.log('current trip', this.tripID)
+
     this.setupLocationUpdator()
     this.setupTimer()
   },

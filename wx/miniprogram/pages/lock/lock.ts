@@ -1,4 +1,5 @@
 import { IAppOption } from "../../appoption"
+import { rental } from "../../gen/ts/auth/rental_pb"
 import { TripService } from "../../service/trip"
 import { routing } from "../../utils/routing"
 
@@ -50,9 +51,31 @@ Page({
     wx.getLocation({
       type: 'gcj02',
       success: async loc => {
-        console.log(loc)
-        // TODO: 向后端传输数据，创建行程
-        // 模拟创建行程
+        if (!this.car_id) {
+          console.error("no car_id specified")
+          return
+        }
+
+        // 尝试创建行程
+        let trip: rental.v1.ITripEntity
+        try {
+          trip = await TripService.CreateTrip({
+            start: {
+              latitude: loc.latitude,
+              longitude: loc.longitude,
+            },
+            carId: this.car_id,
+          })
+          if (!trip.id) {
+            console.error("no tripID in response", trip)
+            return
+          }
+        } catch (error) {
+          wx.showToast({
+            title: "创建行程失败",
+            icon: "none",
+          })
+        }
         console.log('starting a trip', {
           location: {
             latitude: loc.latitude,
@@ -62,27 +85,13 @@ Page({
           avatarURL: this.data.isShareLocation ? this.data.userInfo.avatarUrl : '',
           car_id: '123456',
         })
-        if (!this.car_id) {
-          console.error("no car_id specified")
-          return
-        }
-        const trip = await TripService.CreateTrip({
-          start: {
-            latitude: loc.latitude,
-            longitude: loc.longitude,
-          },
-          carId: this.car_id,
-        })
+
         // 显示一个开锁中提示
         wx.showLoading({
           title: '开锁中',
           // 为页面覆盖一个透明的罩子，避免开锁中时点击到其他元素
           mask: true,
         })
-        if (!trip.id) {
-          console.error("no tripID in response", trip)
-          return
-        }
         // 模拟汽车开锁等待时间
         setTimeout(() => {
           wx.redirectTo({
