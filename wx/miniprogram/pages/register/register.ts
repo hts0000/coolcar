@@ -30,16 +30,16 @@ Page({
           this.setData({
             licImgURL: res.tempFilePaths[0]
           })
-        }
-        // TODO: upload image
-        setTimeout(() => {
-          this.setData({
-            licNo: '123456',
-            name: '张三',
-            genderIndex: 1,
-            birthday: '1989-01-01',
+
+          const data = wx.getFileSystemManager().readFileSync(res.tempFilePaths[0])
+          wx.request({
+            method: "PUT",
+            url: "https://coolcar-1300912551.cos.ap-guangzhou.myqcloud.com/abc.jpg?q-sign-algorithm=sha1&q-ak=AKIDrdAUXKq69xVqwlV1HH0RguxlPpz50kHc&q-sign-time=1666615274%3B1666618874&q-key-time=1666615274%3B1666618874&q-header-list=host&q-url-param-list=&q-signature=8fec4f4579d8b42dd9bc335d78fd35868488853a",
+            data: data,
+            success: console.log,
+            fail: console.error,
           })
-        }, 1000)
+        }
       }
     })
   },

@@ -17,6 +17,13 @@ require (
 require github.com/google/go-cmp v0.5.9
 
 require (
+	github.com/clbanning/mxj v1.8.4 // indirect
+	github.com/google/go-querystring v1.1.0 // indirect
+	github.com/mozillazg/go-httpheader v0.3.1 // indirect
+	github.com/tencentyun/cos-go-sdk-v5 v0.7.39 // indirect
+)
+
+require (
 	github.com/Microsoft/go-winio v0.5.2 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/docker/distribution v2.8.1+incompatible // indirect
