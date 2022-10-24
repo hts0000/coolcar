@@ -6,6 +6,8 @@ protoc --grpc-gateway_out %PBGO_OUT_DIR% --grpc-gateway_opt logtostderr=true --g
 protoc --go_out %PBGO_OUT_DIR% --go_opt paths=source_relative --go-grpc_out %PBGO_OUT_DIR% --go-grpc_opt paths=source_relative rental/api/gen/v1/rental.proto
 protoc --grpc-gateway_out %PBGO_OUT_DIR% --grpc-gateway_opt logtostderr=true --grpc-gateway_opt paths=source_relative rental/api/gen/v1/rental.proto
 
+protoc --go_out %PBGO_OUT_DIR% --go_opt paths=source_relative --go-grpc_out %PBGO_OUT_DIR% --go-grpc_opt paths=source_relative blob/api/gen/v1/blob.proto
+
 set PBTS_BIN_DIR=..\wx\miniprogram\node_modules\.bin
 set PBTS_OUT_DIR=..\wx\miniprogram\gen\ts\auth
 ..\wx\miniprogram\node_modules\.bin\pbjs -t static -w es6 rental\api\gen\v1\rental.proto --no-create --no-encode --no-verify --no-delimited -o %PBTS_OUT_DIR%\rental_pb.js
