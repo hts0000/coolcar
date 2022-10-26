@@ -23,3 +23,9 @@ type CarID string
 func (i CarID) String() string {
 	return string(i)
 }
+
+type BlobID string
+
+func (b BlobID) String() string {
+	return string(b)
+}
