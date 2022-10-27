@@ -178,6 +178,18 @@ func (s *Service) CompleteProfilePhoto(c context.Context, req *rentalpb.Complete
 	}, nil
 }
 
+func (s *Service) ClearProfilePhoto(c context.Context, req *rentalpb.ClearProfilePhotoRequest) (*rentalpb.ClearProfilePhotoResponse, error) {
+	aid, err := auth.AccountIDFromContext(c)
+	if err != nil {
+		return nil, err
+	}
+	err = s.Mongo.UpdateProfilePhoto(c, aid, id.BlobID(""))
+	if err != nil {
+		return nil, status.Error(codes.Internal, "")
+	}
+	return &rentalpb.ClearProfilePhotoResponse{}, nil
+}
+
 func (s *Service) logAndConvertProfileErr(err error) codes.Code {
 	if err == mongo.ErrNoDocuments {
 		return codes.NotFound

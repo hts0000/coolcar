@@ -126,6 +126,9 @@ message CreateProfilePhotoResponse {
 
 message CompleteProfilePhotoRequest {}
 
+message ClearProfilePhotoRequest {}
+message ClearProfilePhotoResponse {}
+
 service ProfileService {
     rpc GetProfile (GetProfileRequest) returns (Profile) {
         option (google.api.http) = {
@@ -159,6 +162,11 @@ service ProfileService {
         option (google.api.http) = {
             post: "/v1/profile/photo/complete"
             body: "*"
+        };
+    }
+    rpc ClearProfilePhoto (ClearProfilePhotoRequest) returns (ClearProfilePhotoResponse) {
+        option (google.api.http) = {
+            delete: "/v1/profile/photo"
         };
     }
 }
