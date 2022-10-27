@@ -114,6 +114,18 @@ message Identity {
 message GetProfileRequest {}
 message ClearProfileRequest {}
 
+message GetProfilePhotoRequest {}
+message GetProfilePhotoResponse {
+    string upload_url = 1;
+}
+
+message CreateProfilePhotoRequest {}
+message CreateProfilePhotoResponse {
+    string upload_url = 1;
+}
+
+message CompleteProfilePhotoRequest {}
+
 service ProfileService {
     rpc GetProfile (GetProfileRequest) returns (Profile) {
         option (google.api.http) = {
@@ -129,6 +141,24 @@ service ProfileService {
     rpc ClearProfile (ClearProfileRequest) returns (Profile) {
         option (google.api.http) = {
             delete: "/v1/profile"
+        };
+    }
+
+    rpc GetProfilePhoto (GetProfilePhotoRequest) returns (GetProfilePhotoResponse) {
+        option (google.api.http) = {
+            get: "/v1/profile/photo"
+        };
+    }
+    rpc CreateProfilePhoto (CreateProfilePhotoRequest) returns (CreateProfilePhotoResponse) {
+        option (google.api.http) = {
+            post: "/v1/profile/photo"
+            body: "*"
+        };
+    }
+    rpc CompleteProfilePhoto (CompleteProfilePhotoRequest) returns (Identity) {
+        option (google.api.http) = {
+            post: "/v1/profile/photo/complete"
+            body: "*"
         };
     }
 }

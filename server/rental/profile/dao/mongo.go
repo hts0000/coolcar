@@ -16,6 +16,7 @@ const (
 	accountIDFiled      = "accountid"
 	profileFiled        = "profile"
 	identityStatusFiled = profileFiled + ".identitystatus"
+	photoBlobIDFiled    = "photoblobid"
 )
 
 type Mongo struct {
@@ -29,11 +30,12 @@ func NewMongo(db *mongo.Database) *Mongo {
 }
 
 type ProfileRecord struct {
-	AccountID string            `bson:"accountid"`
-	Profile   *rentalpb.Profile `bson:"profile"`
+	AccountID   string            `bson:"accountid"`
+	Profile     *rentalpb.Profile `bson:"profile"`
+	PhotoBlobID string            `bson:"photoblobid"`
 }
 
-func (m *Mongo) GetProfile(c context.Context, aid id.AccountID) (*rentalpb.Profile, error) {
+func (m *Mongo) GetProfile(c context.Context, aid id.AccountID) (*ProfileRecord, error) {
 	res := m.col.FindOne(c, byAccountID(aid))
 	if err := res.Err(); err != nil {
 		return nil, err
@@ -43,16 +45,30 @@ func (m *Mongo) GetProfile(c context.Context, aid id.AccountID) (*rentalpb.Profi
 	if err != nil {
 		return nil, fmt.Errorf("cannot decode profile record: %v", err)
 	}
-	return pr.Profile, nil
+	return &pr, nil
 }
 
 func (m *Mongo) UpdateProfile(c context.Context, aid id.AccountID, prevStatus rentalpb.IdentityStatus, profile *rentalpb.Profile) error {
-	_, err := m.col.UpdateOne(c, bson.M{
-		accountIDFiled:      aid.String(),
+	filter := bson.M{
 		identityStatusFiled: prevStatus,
-	}, mgutil.Set(bson.M{
+	}
+	if prevStatus == rentalpb.IdentityStatus_UNSUBMITTED {
+		filter = mgutil.ZeroOrDoesNotExist(identityStatusFiled, prevStatus)
+	}
+	filter[accountIDFiled] = aid.String()
+	_, err := m.col.UpdateOne(c, filter, mgutil.Set(bson.M{
 		accountIDFiled: aid.String(),
 		profileFiled:   profile,
+	}), options.Update().SetUpsert(true))
+	return err
+}
+
+func (m *Mongo) UpdateProfilePhoto(c context.Context, aid id.AccountID, bid id.BlobID) error {
+	_, err := m.col.UpdateOne(c, bson.M{
+		accountIDFiled: aid.String(),
+	}, mgutil.Set(bson.M{
+		accountIDFiled:   aid.String(),
+		photoBlobIDFiled: bid.String(),
 	}), options.Update().SetUpsert(true))
 	return err
 }
