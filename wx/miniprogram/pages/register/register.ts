@@ -3,6 +3,7 @@ import { ProfileService } from "../../service/profile"
 import { routing } from "../../utils/routing"
 import { formatTime } from "../../utils/wxapi";
 import { myFormat } from "../../utils/format";
+import { Coolcar } from "../../service/request";
 
 // pages/register/register.ts
 Page({
@@ -25,21 +26,23 @@ Page({
   // 上传驾驶证实现
   onUploadLic() {
     wx.chooseImage({
-      success: (res) => {
-        if (res.tempFilePaths.length > 0) {
-          this.setData({
-            licImgURL: res.tempFilePaths[0]
-          })
-
-          const data = wx.getFileSystemManager().readFileSync(res.tempFilePaths[0])
-          wx.request({
-            method: "PUT",
-            url: "https://coolcar-1300912551.cos.ap-guangzhou.myqcloud.com/account_1/63592214e24fb8ead7e52a01?q-sign-algorithm=sha1&q-ak=AKIDrdAUXKq69xVqwlV1HH0RguxlPpz50kHc&q-sign-time=1666785812%3B1666786812&q-key-time=1666785812%3B1666786812&q-header-list=host&q-url-param-list=&q-signature=a7c150eb5aa566ee7f4946ffe52de68a3a4d9b6a",
-            data: data,
-            success: console.log,
-            fail: console.error,
-          })
+      success: async res => {
+        if (res.tempFilePaths.length === 0) {
+          return
         }
+        this.setData({
+          licImgURL: res.tempFilePaths[0]
+        })
+        const photoRes = await ProfileService.createProfilePhoto()
+        if (!photoRes.uploadUrl) {
+          return
+        }
+        await Coolcar.uploadfile({
+          localPath: res.tempFilePaths[0],
+          url: photoRes.uploadUrl,
+        })
+        const identity = await ProfileService.completeProfilePhoto()
+        this.renderIdentity(identity)
       }
     })
   },
@@ -99,6 +102,11 @@ Page({
   // 清掉之前表单的数据，让用户可以重新上传
   onReSubmit() {
     ProfileService.clearProfile().then(p => this.renderProfile(p))
+    ProfileService.clearProfilePhoto().then(() => {
+      this.setData({
+        licImgURL: "",
+      })
+    })
   },
 
   // 修改驾驶证认证状态
@@ -114,12 +122,18 @@ Page({
   },
 
   renderProfile(p: rental.v1.IProfile) {
+    this.renderIdentity(p.identity!)
     this.setData({
-      licNo: p.identity?.licNumber || "",
-      name: p.identity?.name || "",
-      genderIndex: p.identity?.gender || 0,
-      birthday: myFormat(formatTime(new Date(p.identity?.birthDateMillis as number || 0))),
       state: rental.v1.IdentityStatus[p.identityStatus || 0],
+    })
+  },
+
+  renderIdentity(i?: rental.v1.IIdentity) {
+    this.setData({
+      licNo: i?.licNumber || "",
+      name: i?.name || "",
+      genderIndex: i?.gender || 0,
+      birthday: myFormat(formatTime(new Date(i?.birthDateMillis as number || 0))),
     })
   },
 
@@ -132,6 +146,11 @@ Page({
       this.redirectURL = decodeURIComponent(opt.redirectURL)
     }
     ProfileService.getProfile().then(p => this.renderProfile(p))
+    ProfileService.getProfilePhoto().then(p => {
+      this.setData({
+        licImgURL: p.uploadUrl || "",
+      })
+    })
   },
 
   /**
