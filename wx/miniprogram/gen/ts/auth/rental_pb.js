@@ -826,6 +826,7 @@ export const rental = $root.rental = (() => {
              * @interface ICreateTripRequest
              * @property {rental.v1.ILocation|null} [start] CreateTripRequest start
              * @property {string|null} [carId] CreateTripRequest carId
+             * @property {string|null} [avatarUrl] CreateTripRequest avatarUrl
              */
 
             /**
@@ -860,6 +861,14 @@ export const rental = $root.rental = (() => {
             CreateTripRequest.prototype.carId = "";
 
             /**
+             * CreateTripRequest avatarUrl.
+             * @member {string} avatarUrl
+             * @memberof rental.v1.CreateTripRequest
+             * @instance
+             */
+            CreateTripRequest.prototype.avatarUrl = "";
+
+            /**
              * Decodes a CreateTripRequest message from the specified reader or buffer.
              * @function decode
              * @memberof rental.v1.CreateTripRequest
@@ -883,6 +892,10 @@ export const rental = $root.rental = (() => {
                         }
                         case 2: {
                             message.carId = reader.string();
+                            break;
+                        }
+                        case 3: {
+                            message.avatarUrl = reader.string();
                             break;
                         }
                         default:
@@ -912,6 +925,8 @@ export const rental = $root.rental = (() => {
                 }
                 if (object.carId != null)
                     message.carId = String(object.carId);
+                if (object.avatarUrl != null)
+                    message.avatarUrl = String(object.avatarUrl);
                 return message;
             };
 
@@ -931,11 +946,14 @@ export const rental = $root.rental = (() => {
                 if (options.defaults) {
                     object.start = null;
                     object.carId = "";
+                    object.avatarUrl = "";
                 }
                 if (message.start != null && message.hasOwnProperty("start"))
                     object.start = $root.rental.v1.Location.toObject(message.start, options);
                 if (message.carId != null && message.hasOwnProperty("carId"))
                     object.carId = message.carId;
+                if (message.avatarUrl != null && message.hasOwnProperty("avatarUrl"))
+                    object.avatarUrl = message.avatarUrl;
                 return object;
             };
 
