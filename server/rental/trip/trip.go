@@ -155,6 +155,7 @@ func (s *Service) UpdateTrip(c context.Context, req *rentalpb.UpdateTripRequest)
 	if req.EndTrip {
 		tr.Trip.End = tr.Trip.Current
 		tr.Trip.Status = rentalpb.TripStatus_FINISHED
+		// TODO: 前端应该等到汽车发送锁车成功状态，才结束行程
 		err := s.CarManager.Lock(c, id.CarID(tr.Trip.CarId))
 		if err != nil {
 			return nil, status.Errorf(codes.FailedPrecondition, "cannot lock car: %v", err)

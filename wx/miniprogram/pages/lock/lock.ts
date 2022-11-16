@@ -15,6 +15,7 @@ Page({
     isShareLocation: false,
     userInfo: {} as WechatMiniprogram.UserInfo,
     hasUserInfo: false,
+    avatarURL: '',
   },
 
   // 获取用户信息的回调函数
@@ -65,6 +66,7 @@ Page({
               longitude: loc.longitude,
             },
             carId: this.car_id,
+            avatarUrl: this.data.isShareLocation ? this.data.avatarURL : '',
           })
           if (!trip.id) {
             console.error("no tripID in response", trip)
@@ -75,16 +77,8 @@ Page({
             title: "创建行程失败",
             icon: "none",
           })
+          return
         }
-        console.log('starting a trip', {
-          location: {
-            latitude: loc.latitude,
-            longitude: loc.longitude,
-          },
-          // TODO: 需要数据的双向绑定
-          avatarURL: this.data.isShareLocation ? this.data.userInfo.avatarUrl : '',
-          car_id: '123456',
-        })
 
         // 显示一个开锁中提示
         wx.showLoading({
@@ -92,6 +86,7 @@ Page({
           // 为页面覆盖一个透明的罩子，避免开锁中时点击到其他元素
           mask: true,
         })
+
         // 模拟汽车开锁等待时间
         setTimeout(() => {
           wx.redirectTo({
@@ -128,6 +123,7 @@ Page({
     console.log("onLoad", isShare)
     this.setData({
       isShareLocation: isShare === '' ? true : isShare,
+      avatarURL: this.data.userInfo.avatarUrl,
     })
   },
 
