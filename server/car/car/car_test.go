@@ -20,6 +20,12 @@ func TestMain(m *testing.M) {
 	}))
 }
 
+type testPublisher struct{}
+
+func (p *testPublisher) Publish(c context.Context, car *carpb.CarEntity) error {
+	return nil
+}
+
 func TestCarUpdate(t *testing.T) {
 	c := context.Background()
 	mc, err := mongotesting.NewClient(c)
@@ -33,8 +39,9 @@ func TestCarUpdate(t *testing.T) {
 	}
 
 	s := &Service{
-		Logger: logger,
-		Mongo:  dao.NewMongo(mc.Database("coolcar")),
+		Logger:    logger,
+		Mongo:     dao.NewMongo(mc.Database("coolcar")),
+		Publisher: &testPublisher{},
 	}
 
 	carID := id.CarID("632b1c6e130f50c2748137ab")
@@ -55,7 +62,7 @@ func TestCarUpdate(t *testing.T) {
 			op: func() error {
 				return nil
 			},
-			want:    "",
+			want:    `{"status":1,"position":{"latitude":30,"longitude":120}}`,
 			wantErr: false,
 		},
 		{
@@ -71,7 +78,7 @@ func TestCarUpdate(t *testing.T) {
 				})
 				return err
 			},
-			want:    "",
+			want:    `{"status":2,"driver":{"id":"test_driver","avatar_url":"test_avatar"},"position":{"latitude":30,"longitude":120},"trip_id":"test_trip"}`,
 			wantErr: false,
 		},
 		{
@@ -87,7 +94,7 @@ func TestCarUpdate(t *testing.T) {
 				})
 				return err
 			},
-			want:    "",
+			want:    `{"status":3,"driver":{"id":"test_driver","avatar_url":"test_avatar"},"position":{"latitude":31,"longitude":121},"trip_id":"test_trip"}`,
 			wantErr: false,
 		},
 		{
@@ -104,7 +111,7 @@ func TestCarUpdate(t *testing.T) {
 				return err
 			},
 			want:    "",
-			wantErr: false,
+			wantErr: true,
 		},
 		{
 			name: "lock_car",
@@ -114,7 +121,7 @@ func TestCarUpdate(t *testing.T) {
 				})
 				return err
 			},
-			want:    "",
+			want:    `{"status":4,"driver":{"id":"test_driver","avatar_url":"test_avatar"},"position":{"latitude":31,"longitude":121},"trip_id":"test_trip"}`,
 			wantErr: false,
 		},
 		{
@@ -126,7 +133,7 @@ func TestCarUpdate(t *testing.T) {
 				})
 				return err
 			},
-			want:    "",
+			want:    `{"status":1,"driver":{},"position":{"latitude":31,"longitude":121}}`,
 			wantErr: false,
 		},
 	}

@@ -59,20 +59,9 @@ func (m *Mongo) GetCar(c context.Context, id id.CarID) (*CarRecord, error) {
 	if err != nil {
 		return nil, fmt.Errorf("invalid id: %v", err)
 	}
-	res := m.col.FindOne(c, bson.M{
+	return convertSingleResult(m.col.FindOne(c, bson.M{
 		mgutil.IDFieldName: objID,
-	})
-
-	if err := res.Err(); err != nil {
-		return nil, err
-	}
-
-	var cr CarRecord
-	err = res.Decode(&cr)
-	if err != nil {
-		return nil, fmt.Errorf("cannot decode: %v", err)
-	}
-	return &cr, nil
+	}))
 }
 
 func (m *Mongo) GetCars(c context.Context) ([]*CarRecord, error) {
@@ -102,10 +91,10 @@ type CarUpdate struct {
 	TripID       id.TripID
 }
 
-func (m *Mongo) UpdateCar(c context.Context, id id.CarID, status carpb.CarStatus, update *CarUpdate) error {
+func (m *Mongo) UpdateCar(c context.Context, id id.CarID, status carpb.CarStatus, update *CarUpdate) (*CarRecord, error) {
 	objID, err := objid.FromID(id)
 	if err != nil {
-		return fmt.Errorf("invalid id: %v", err)
+		return nil, fmt.Errorf("invalid id: %v", err)
 	}
 
 	// 设置查找MongoDB的条件
@@ -121,6 +110,9 @@ func (m *Mongo) UpdateCar(c context.Context, id id.CarID, status carpb.CarStatus
 	if update.Status != carpb.CarStatus_CS_NOT_SPECIFIED {
 		u[statusField] = update.Status
 	}
+	if update.Driver != nil {
+		u[driverField] = update.Driver
+	}
 	if update.Position != nil {
 		u[positionField] = update.Position
 	}
@@ -128,12 +120,20 @@ func (m *Mongo) UpdateCar(c context.Context, id id.CarID, status carpb.CarStatus
 		u[tripIDField] = update.TripID.String()
 	}
 
-	res, err := m.col.UpdateOne(c, filter, mgutil.Set(u))
+	res := m.col.FindOneAndUpdate(c, filter, mgutil.Set(u),
+		options.FindOneAndUpdate().SetReturnDocument(options.After))
+	return convertSingleResult(res)
+}
+
+func convertSingleResult(res *mongo.SingleResult) (*CarRecord, error) {
+	if err := res.Err(); err != nil {
+		return nil, err
+	}
+
+	var cr CarRecord
+	err := res.Decode(&cr)
 	if err != nil {
-		return err
+		return nil, fmt.Errorf("cannot decode: %v", err)
 	}
-	if res.MatchedCount == 0 {
-		return mongo.ErrNoDocuments
-	}
-	return nil
+	return &cr, nil
 }

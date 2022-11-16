@@ -124,7 +124,7 @@ Page({
       success: async () => {
         // TODO: 从二维码中获取car_id
         // 模拟已经获得car_id
-        const car_id = 'car_123'
+        const car_id = '6374a3d6ca16911df281d8e0'
 
         // 指示register页面接下来跳转到lock页面
         const lockURL = routing.lock({

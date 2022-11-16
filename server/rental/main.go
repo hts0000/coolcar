@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	blobpb "coolcar/blob/api/gen/v1"
+	carpb "coolcar/car/api/gen/v1"
 	rentalpb "coolcar/rental/api/gen/v1"
 	"coolcar/rental/profile"
 	profiledao "coolcar/rental/profile/dao"
@@ -48,6 +49,11 @@ func main() {
 		Logger:            logger,
 	}
 
+	carConn, err := grpc.Dial("localhost:8084", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		logger.Fatal("cannot dial car service", zap.Error(err))
+	}
+
 	logger.Sugar().Fatal(server.RunGRPCServer(&server.GRPCConfig{
 		Name:              "rental",
 		Addr:              ":8082",
@@ -55,7 +61,9 @@ func main() {
 		Logger:            logger,
 		RegisterFunc: func(s *grpc.Server) {
 			rentalpb.RegisterTripServiceServer(s, &trip.Service{
-				CarManager: &car.Manager{},
+				CarManager: &car.Manager{
+					CarService: carpb.NewCarServiceClient(carConn),
+				},
 				ProfileManager: &profileclient.Manager{
 					Fetcher: profileService,
 				},
