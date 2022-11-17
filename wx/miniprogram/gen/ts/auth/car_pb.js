@@ -1,3 +1,4 @@
+import * as $protobuf from "protobufjs";
 // Common aliases
 const $Reader = $protobuf.Reader, $util = $protobuf.util;
 
@@ -13,7 +14,7 @@ export const car = $root.car = (() => {
      */
     const car = {};
 
-    car.v1 = (function() {
+    car.v1 = (function () {
 
         /**
          * Namespace v1.
@@ -22,7 +23,7 @@ export const car = $root.car = (() => {
          */
         const v1 = {};
 
-        v1.CarEntity = (function() {
+        v1.CarEntity = (function () {
 
             /**
              * Properties of a CarEntity.
@@ -81,17 +82,17 @@ export const car = $root.car = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.id = reader.string();
                             break;
                         }
-                    case 2: {
+                        case 2: {
                             message.car = $root.car.v1.Car.decode(reader, reader.uint32());
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -182,7 +183,7 @@ export const car = $root.car = (() => {
          * @property {number} UNLOCKED=3 UNLOCKED value
          * @property {number} LOCKING=4 LOCKING value
          */
-        v1.CarStatus = (function() {
+        v1.CarStatus = (function () {
             const valuesById = {}, values = Object.create(valuesById);
             values[valuesById[0] = "CS_NOT_SPECIFIED"] = 0;
             values[valuesById[1] = "LOCKED"] = 1;
@@ -192,7 +193,7 @@ export const car = $root.car = (() => {
             return values;
         })();
 
-        v1.Driver = (function() {
+        v1.Driver = (function () {
 
             /**
              * Properties of a Driver.
@@ -251,17 +252,17 @@ export const car = $root.car = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.id = reader.string();
                             break;
                         }
-                    case 2: {
+                        case 2: {
                             message.avatarUrl = reader.string();
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -339,7 +340,7 @@ export const car = $root.car = (() => {
             return Driver;
         })();
 
-        v1.Location = (function() {
+        v1.Location = (function () {
 
             /**
              * Properties of a Location.
@@ -398,17 +399,17 @@ export const car = $root.car = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.latitude = reader.double();
                             break;
                         }
-                    case 2: {
+                        case 2: {
                             message.longitude = reader.double();
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -486,7 +487,7 @@ export const car = $root.car = (() => {
             return Location;
         })();
 
-        v1.Car = (function() {
+        v1.Car = (function () {
 
             /**
              * Properties of a Car.
@@ -563,25 +564,25 @@ export const car = $root.car = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.status = reader.int32();
                             break;
                         }
-                    case 2: {
+                        case 2: {
                             message.driver = $root.car.v1.Driver.decode(reader, reader.uint32());
                             break;
                         }
-                    case 3: {
+                        case 3: {
                             message.position = $root.car.v1.Location.decode(reader, reader.uint32());
                             break;
                         }
-                    case 4: {
+                        case 4: {
                             message.tripId = reader.string();
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -600,32 +601,32 @@ export const car = $root.car = (() => {
                     return object;
                 let message = new $root.car.v1.Car();
                 switch (object.status) {
-                default:
-                    if (typeof object.status === "number") {
-                        message.status = object.status;
+                    default:
+                        if (typeof object.status === "number") {
+                            message.status = object.status;
+                            break;
+                        }
                         break;
-                    }
-                    break;
-                case "CS_NOT_SPECIFIED":
-                case 0:
-                    message.status = 0;
-                    break;
-                case "LOCKED":
-                case 1:
-                    message.status = 1;
-                    break;
-                case "UNLOCKING":
-                case 2:
-                    message.status = 2;
-                    break;
-                case "UNLOCKED":
-                case 3:
-                    message.status = 3;
-                    break;
-                case "LOCKING":
-                case 4:
-                    message.status = 4;
-                    break;
+                    case "CS_NOT_SPECIFIED":
+                    case 0:
+                        message.status = 0;
+                        break;
+                    case "LOCKED":
+                    case 1:
+                        message.status = 1;
+                        break;
+                    case "UNLOCKING":
+                    case 2:
+                        message.status = 2;
+                        break;
+                    case "UNLOCKED":
+                    case 3:
+                        message.status = 3;
+                        break;
+                    case "LOCKING":
+                    case 4:
+                        message.status = 4;
+                        break;
                 }
                 if (object.driver != null) {
                     if (typeof object.driver !== "object")
@@ -701,7 +702,7 @@ export const car = $root.car = (() => {
             return Car;
         })();
 
-        v1.CreateCarRequest = (function() {
+        v1.CreateCarRequest = (function () {
 
             /**
              * Properties of a CreateCarRequest.
@@ -742,9 +743,9 @@ export const car = $root.car = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -806,7 +807,7 @@ export const car = $root.car = (() => {
             return CreateCarRequest;
         })();
 
-        v1.GetCarRequest = (function() {
+        v1.GetCarRequest = (function () {
 
             /**
              * Properties of a GetCarRequest.
@@ -856,13 +857,13 @@ export const car = $root.car = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.id = reader.string();
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -934,7 +935,7 @@ export const car = $root.car = (() => {
             return GetCarRequest;
         })();
 
-        v1.GetCarsRequest = (function() {
+        v1.GetCarsRequest = (function () {
 
             /**
              * Properties of a GetCarsRequest.
@@ -975,9 +976,9 @@ export const car = $root.car = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -1039,7 +1040,7 @@ export const car = $root.car = (() => {
             return GetCarsRequest;
         })();
 
-        v1.GetCarsResponse = (function() {
+        v1.GetCarsResponse = (function () {
 
             /**
              * Properties of a GetCarsResponse.
@@ -1090,15 +1091,15 @@ export const car = $root.car = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             if (!(message.cars && message.cars.length))
                                 message.cars = [];
                             message.cars.push($root.car.v1.CarEntity.decode(reader, reader.uint32()));
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -1181,7 +1182,7 @@ export const car = $root.car = (() => {
             return GetCarsResponse;
         })();
 
-        v1.LockCarRequest = (function() {
+        v1.LockCarRequest = (function () {
 
             /**
              * Properties of a LockCarRequest.
@@ -1231,13 +1232,13 @@ export const car = $root.car = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.id = reader.string();
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -1309,7 +1310,7 @@ export const car = $root.car = (() => {
             return LockCarRequest;
         })();
 
-        v1.LockCarResponse = (function() {
+        v1.LockCarResponse = (function () {
 
             /**
              * Properties of a LockCarResponse.
@@ -1350,9 +1351,9 @@ export const car = $root.car = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -1414,7 +1415,7 @@ export const car = $root.car = (() => {
             return LockCarResponse;
         })();
 
-        v1.UnlockCarRequest = (function() {
+        v1.UnlockCarRequest = (function () {
 
             /**
              * Properties of an UnlockCarRequest.
@@ -1482,21 +1483,21 @@ export const car = $root.car = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.id = reader.string();
                             break;
                         }
-                    case 2: {
+                        case 2: {
                             message.driver = $root.car.v1.Driver.decode(reader, reader.uint32());
                             break;
                         }
-                    case 3: {
+                        case 3: {
                             message.tripId = reader.string();
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -1582,7 +1583,7 @@ export const car = $root.car = (() => {
             return UnlockCarRequest;
         })();
 
-        v1.UnlockCarResponse = (function() {
+        v1.UnlockCarResponse = (function () {
 
             /**
              * Properties of an UnlockCarResponse.
@@ -1623,9 +1624,9 @@ export const car = $root.car = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -1687,7 +1688,7 @@ export const car = $root.car = (() => {
             return UnlockCarResponse;
         })();
 
-        v1.UpdateCarRequest = (function() {
+        v1.UpdateCarRequest = (function () {
 
             /**
              * Properties of an UpdateCarRequest.
@@ -1755,21 +1756,21 @@ export const car = $root.car = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                        case 1: {
                             message.id = reader.string();
                             break;
                         }
-                    case 2: {
+                        case 2: {
                             message.status = reader.int32();
                             break;
                         }
-                    case 3: {
+                        case 3: {
                             message.position = $root.car.v1.Location.decode(reader, reader.uint32());
                             break;
                         }
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -1790,32 +1791,32 @@ export const car = $root.car = (() => {
                 if (object.id != null)
                     message.id = String(object.id);
                 switch (object.status) {
-                default:
-                    if (typeof object.status === "number") {
-                        message.status = object.status;
+                    default:
+                        if (typeof object.status === "number") {
+                            message.status = object.status;
+                            break;
+                        }
                         break;
-                    }
-                    break;
-                case "CS_NOT_SPECIFIED":
-                case 0:
-                    message.status = 0;
-                    break;
-                case "LOCKED":
-                case 1:
-                    message.status = 1;
-                    break;
-                case "UNLOCKING":
-                case 2:
-                    message.status = 2;
-                    break;
-                case "UNLOCKED":
-                case 3:
-                    message.status = 3;
-                    break;
-                case "LOCKING":
-                case 4:
-                    message.status = 4;
-                    break;
+                    case "CS_NOT_SPECIFIED":
+                    case 0:
+                        message.status = 0;
+                        break;
+                    case "LOCKED":
+                    case 1:
+                        message.status = 1;
+                        break;
+                    case "UNLOCKING":
+                    case 2:
+                        message.status = 2;
+                        break;
+                    case "UNLOCKED":
+                    case 3:
+                        message.status = 3;
+                        break;
+                    case "LOCKING":
+                    case 4:
+                        message.status = 4;
+                        break;
                 }
                 if (object.position != null) {
                     if (typeof object.position !== "object")
@@ -1881,7 +1882,7 @@ export const car = $root.car = (() => {
             return UpdateCarRequest;
         })();
 
-        v1.UpdateCarResponse = (function() {
+        v1.UpdateCarResponse = (function () {
 
             /**
              * Properties of an UpdateCarResponse.
@@ -1922,9 +1923,9 @@ export const car = $root.car = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    default:
-                        reader.skipType(tag & 7);
-                        break;
+                        default:
+                            reader.skipType(tag & 7);
+                            break;
                     }
                 }
                 return message;
@@ -1986,7 +1987,7 @@ export const car = $root.car = (() => {
             return UpdateCarResponse;
         })();
 
-        v1.CarService = (function() {
+        v1.CarService = (function () {
 
             /**
              * Constructs a new CarService service.

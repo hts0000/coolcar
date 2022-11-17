@@ -1,5 +1,6 @@
 import { IAppOption } from "../../appoption"
 import { rental } from "../../gen/ts/auth/rental_pb"
+import { CarService } from "../../service/car"
 import { ProfileService } from "../../service/profile"
 import { TripService } from "../../service/trip"
 import { routing } from "../../utils/routing"
@@ -7,6 +8,8 @@ import { routing } from "../../utils/routing"
 Page({
   // 当页面隐藏时，后台数据不再更新
   isPageShowing: false,
+  socket: undefined as WechatMiniprogram.SocketTask | undefined,
+
   data: {
     setting: {
       skew: 0,
@@ -52,6 +55,7 @@ Page({
 
   // 点击定位图标，将定位移动到当前位置
   onMyLocationTap() {
+    this.socket?.close({})
     // 获取当前位置的函数，传入是一个对象
     wx.getLocation({
       type: "gcj02",
@@ -169,6 +173,11 @@ Page({
   },
 
   onLoad() {
+    let msgReceived = 0
+    this.socket = CarService.subscribe(msg => {
+      msgReceived++
+      console.log(msg)
+    })
   },
 
   onShow() {
