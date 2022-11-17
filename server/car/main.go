@@ -6,6 +6,7 @@ import (
 	carpb "coolcar/car/api/gen/v1"
 	"coolcar/car/car"
 	"coolcar/car/dao"
+	"coolcar/car/sim"
 	"coolcar/shared/server"
 	"log"
 
@@ -14,6 +15,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
@@ -36,10 +38,28 @@ func main() {
 	}
 	defer amqpConn.Close()
 
-	pub, err := amqpclt.NewPublisher(amqpConn, "coolcar")
+	exchange := "coolcar"
+	pub, err := amqpclt.NewPublisher(amqpConn, exchange)
 	if err != nil {
 		logger.Fatal("cannot create publisher", zap.Error(err))
 	}
+
+	carConn, err := grpc.Dial("localhost:8084", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		logger.Fatal("cannot dial car service", zap.Error(err))
+	}
+
+	sub, err := amqpclt.NewSubscriber(amqpConn, exchange, logger)
+	if err != nil {
+		logger.Fatal("cannot create subscriber", zap.Error(err))
+	}
+
+	simController := &sim.Controller{
+		CarService: carpb.NewCarServiceClient(carConn),
+		Logger:     logger,
+		Subscriber: sub,
+	}
+	go simController.RunSimulations(context.Background())
 
 	logger.Sugar().Fatal(server.RunGRPCServer(&server.GRPCConfig{
 		Name:   "car",
