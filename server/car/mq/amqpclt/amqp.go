@@ -84,7 +84,9 @@ func (s *Subscriber) SubscribeRaw(c context.Context) (<-chan amqp.Delivery, func
 
 	closeCh := func() {
 		err := ch.Close()
-		s.logger.Error("cannot close channel", zap.Error(err))
+		if err != nil {
+			s.logger.Error("cannot close channel", zap.Error(err))
+		}
 	}
 
 	q, err := ch.QueueDeclare(
