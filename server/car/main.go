@@ -7,7 +7,9 @@ import (
 	"coolcar/car/dao"
 	"coolcar/car/mq/amqpclt"
 	"coolcar/car/sim"
+	"coolcar/car/sim/pos"
 	"coolcar/car/ws"
+	coolenvpb "coolcar/shared/coolenv"
 	"coolcar/shared/server"
 	"log"
 	"net/http"
@@ -52,15 +54,30 @@ func main() {
 		logger.Fatal("cannot dial car service", zap.Error(err))
 	}
 
-	sub, err := amqpclt.NewSubscriber(amqpConn, exchange, logger)
+	carSub, err := amqpclt.NewSubscriber(amqpConn, exchange, logger)
 	if err != nil {
-		logger.Fatal("cannot create subscriber", zap.Error(err))
+		logger.Fatal("cannot create car subscriber", zap.Error(err))
+	}
+
+	aiConn, err := grpc.Dial("hts0000.top:18001", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		logger.Fatal("cannot dial ai service", zap.Error(err))
+	}
+
+	posSub, err := amqpclt.NewSubscriber(amqpConn, "pos_sim", logger)
+	if err != nil {
+		logger.Fatal("cannot create pos subscriber", zap.Error(err))
 	}
 
 	simController := &sim.Controller{
-		CarService: carpb.NewCarServiceClient(carConn),
-		Logger:     logger,
-		Subscriber: sub,
+		CarService:    carpb.NewCarServiceClient(carConn),
+		AIService:     coolenvpb.NewAIServiceClient(aiConn),
+		Logger:        logger,
+		CarSubscriber: carSub,
+		PosSubscriber: &pos.Subscriber{
+			Logger: logger,
+			Sub:    posSub,
+		},
 	}
 	go simController.RunSimulations(context.Background())
 
@@ -68,7 +85,7 @@ func main() {
 	u := &websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool { return true },
 	}
-	http.HandleFunc("/ws", ws.Handler(u, sub, logger))
+	http.HandleFunc("/ws", ws.Handler(u, carSub, logger))
 	go func() {
 		addr := ":9090"
 		logger.Info("HTTP server started.", zap.String("addr", addr))
