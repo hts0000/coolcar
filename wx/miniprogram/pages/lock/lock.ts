@@ -1,5 +1,7 @@
 import { IAppOption } from "../../appoption"
+import { car } from "../../gen/ts/auth/car_pb"
 import { rental } from "../../gen/ts/auth/rental_pb"
+import { CarService } from "../../service/car"
 import { TripService } from "../../service/trip"
 import { routing } from "../../utils/routing"
 
@@ -11,6 +13,7 @@ Page({
    * 页面的初始数据
    */
   car_id: "",
+  carRefresher: 0,
   data: {
     isShareLocation: false,
     userInfo: {} as WechatMiniprogram.UserInfo,
@@ -40,10 +43,10 @@ Page({
 
   // 记录用户是否展示行程
   onShareLocation(e: any) {
-    const isShareLocation: Boolean = e.detail.value
+    this.data.isShareLocation = e.detail.value
     // setStorageSync会以键值对的方式存储在手机本地，重新打开小程序还可以获取到
     // 相当于一个键值对数据库
-    wx.setStorageSync(shareLocationKey, isShareLocation)
+    wx.setStorageSync(shareLocationKey, true)
   },
 
   // 前往行程页面
@@ -87,17 +90,20 @@ Page({
           mask: true,
         })
 
-        // 模拟汽车开锁等待时间
-        setTimeout(() => {
-          wx.redirectTo({
-            url: routing.driving({
-              trip_id: trip.id!,
-            }),
-            complete: () => {
-              wx.hideLoading()
-            },
-          })
-        }, 3000)
+        this.carRefresher = setInterval(async () => {
+          const c = await CarService.getCar(this.car_id)
+          if (c.status === car.v1.CarStatus.UNLOCKED) {
+            this.clearCarRefresher()
+            wx.redirectTo({
+              url: routing.driving({
+                trip_id: trip.id!,
+              }),
+              complete: () => {
+                wx.hideLoading()
+              },
+            })
+          }
+        }, 2000)
       },
       fail: () => { // 失败的回调
         wx.showToast({  // showToast会弹出一个窗口，显示内容提示用户
@@ -107,6 +113,13 @@ Page({
         })
       },
     })
+  },
+
+  clearCarRefresher() {
+    if (this.carRefresher) {
+      clearInterval(this.carRefresher)
+      this.carRefresher = 0
+    }
   },
 
   /**
@@ -119,10 +132,8 @@ Page({
     // 每次打开小程序时，就去获取是否分享行程这个值
     // 如果没有这个值，则默认设置为true
     // 有则取本地值
-    const isShare: boolean | '' = wx.getStorageSync(shareLocationKey) // 取不到值是''
-    console.log("onLoad", isShare)
     this.setData({
-      isShareLocation: isShare === '' ? true : isShare,
+      isShareLocation: wx.getStorageSync(shareLocationKey) || false,
       avatarURL: this.data.userInfo.avatarUrl,
     })
   },
@@ -152,7 +163,8 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
-
+    this.clearCarRefresher()
+    wx.hideLoading()
   },
 
   /**

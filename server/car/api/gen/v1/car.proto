@@ -78,7 +78,7 @@ service CarService {
     }
     rpc GetCar (GetCarRequest) returns (Car) {
         option (google.api.http) = {
-            get: "/v1/car"
+            get: "/v1/car/{id}"
         };
     }
     rpc GetCars (GetCarsRequest) returns (GetCarsResponse);
