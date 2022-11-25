@@ -6,7 +6,7 @@
       ></view>
       <view class="margin-top text-size text-black text-bold">{{elapsed}}</view>
     </view>
-    <view class="fare-text text-bold">费用：{{fare}}元</view>
+    <view class="fare-text text-bold">费用：{{fee}}元</view>
     <button class="driving-btn cu-btn bg-red margin-tb-sm lg" bindtap="onEndTripTap">
       结束行程
     </button>

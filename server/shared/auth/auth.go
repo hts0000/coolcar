@@ -17,8 +17,11 @@ import (
 )
 
 const (
-	authorizationHeader = "authorization"
-	bearerPrefix        = "Bearer "
+	// 定义一个header，用于在请求头中加上和辨识
+	// 一个请求是内部服务以某个account-id的身份来请求行程服务
+	ImpersonateAccountHeader = "impersonate-account-id"
+	authorizationHeader      = "authorization"
+	bearerPrefix             = "Bearer "
 )
 
 func Interceptor(publicKeyFile string) (grpc.UnaryServerInterceptor, error) {
@@ -51,17 +54,37 @@ type interceptor struct {
 }
 
 func (i *interceptor) HandleRequest(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
+	// 如果是特殊的内部请求，从特殊的请求头中获取aid并直接返回
+	aid := impersonationFromContext(ctx)
+	if aid != "" {
+		return handler(ContextWithAccountID(ctx, id.AccountID(aid)), req)
+	}
+
 	tkn, err := tokenFromContext(ctx)
 	if err != nil {
 		return nil, status.Error(codes.Unauthenticated, "")
 	}
 
-	aid, err := i.verifier.Verify(tkn)
+	aid, err = i.verifier.Verify(tkn)
 	if err != nil {
 		return nil, status.Errorf(codes.Unauthenticated, "token not valid: %v", err)
 	}
 
 	return handler(ContextWithAccountID(ctx, id.AccountID(aid)), req)
+}
+
+func impersonationFromContext(c context.Context) string {
+	m, ok := metadata.FromIncomingContext(c)
+	if !ok {
+		return ""
+	}
+
+	imp := m[ImpersonateAccountHeader]
+	if len(imp) == 0 {
+		return ""
+	}
+
+	return imp[0]
 }
 
 func tokenFromContext(c context.Context) (string, error) {
