@@ -7,7 +7,9 @@ import (
 	"coolcar/blob/cos"
 	"coolcar/blob/dao"
 	"coolcar/shared/server"
+	"fmt"
 	"log"
+	"os"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -29,11 +31,19 @@ func main() {
 
 	db := mongoClient.Database("coolcar")
 
+	// 从环境变量中读取腾讯云认证id、key、存储桶名称和地区
+	var (
+		secID   = os.Getenv("SECRETID")
+		secKey  = os.Getenv("SECRETKEY")
+		bktName = os.Getenv("BUCKETNAME")
+		region  = os.Getenv("REGION")
+	)
+
 	st, err := cos.NewService(
-		"https://coolcar-1300912551.cos.ap-guangzhou.myqcloud.com",
-		"https://cos.ap-guangzhou.myqcloud.com",
-		"AKIDrdAUXKq69xVqwlV1HH0RguxlPpz50kHc",
-		"B6kALI5c9QSDsLdiZCYdXBanmW6TbS3R",
+		fmt.Sprintf("https://%s.cos.%s.myqcloud.com", bktName, region),
+		fmt.Sprintf("https://cos.%s.myqcloud.com", region),
+		secID,
+		secKey,
 	)
 	if err != nil {
 		logger.Fatal("cannot create cos service", zap.Error(err))
