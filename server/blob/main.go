@@ -37,11 +37,14 @@ func main() {
 		secKey  = os.Getenv("SECRETKEY")
 		bktName = os.Getenv("BUCKETNAME")
 		region  = os.Getenv("REGION")
+
+		bktAddr = fmt.Sprintf("https://%s.cos.%s.myqcloud.com", bktName, region)
+		serAddr = fmt.Sprintf("https://cos.%s.myqcloud.com", region)
 	)
 
 	st, err := cos.NewService(
-		fmt.Sprintf("https://%s.cos.%s.myqcloud.com", bktName, region),
-		fmt.Sprintf("https://cos.%s.myqcloud.com", region),
+		bktAddr,
+		serAddr,
 		secID,
 		secKey,
 	)
