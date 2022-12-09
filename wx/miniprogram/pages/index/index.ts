@@ -5,6 +5,22 @@ import { ProfileService } from "../../service/profile"
 import { TripService } from "../../service/trip"
 import { routing } from "../../utils/routing"
 
+interface Marker {
+  iconPath: string,
+  id: number,
+  latitude: number,
+  longitude: number,
+  width: number,
+  height: number,
+
+}
+
+// 默认头像
+const defaultAvatar = "/resources/car.png"
+// 初始位置
+const initialLat = 30
+const initialLng = 120
+
 Page({
   // 当页面隐藏时，后台数据不再更新
   isPageShowing: false,
@@ -29,33 +45,17 @@ Page({
     },
     avatarURL: '' as string | undefined,
     location: {
-      latitude: 23.099994,
-      longitude: 113.324520,
+      latitude: initialLat,
+      longitude: initialLng,
     },
-    scale: 10,  // 3~20，缩放比例，3最大缩放
-    markers: [  // 叠在map上的元素
-      {
-        iconPath: "/resources/car.png",
-        id: 0,
-        latitude: 23.099994,
-        longitude: 113.324520,
-        width: 50,
-        height: 50,
-      },
-      {
-        iconPath: "/resources/car.png",
-        id: 1,
-        latitude: 23.09995,
-        longitude: 113.324520,
-        width: 50,
-        height: 50,
-      },
-    ],
+    // 3~20，缩放比例，3最大缩放
+    scale: 10,
+    // 叠在map上的元素
+    markers: [] as Marker[],
   },
 
   // 点击定位图标，将定位移动到当前位置
   onMyLocationTap() {
-    this.socket?.close({})
     // 获取当前位置的函数，传入是一个对象
     wx.getLocation({
       type: "gcj02",
@@ -74,6 +74,71 @@ Page({
           duration: 2000
         })
       },
+    })
+  },
+
+  setupCarPosUpdater() {
+    // 根据map元素id选中map，获取map对象进行操作
+    const map = wx.createMapContext("mapId")
+    const markersByCarID = new Map<string, Marker>()
+    let translationInProgress = false
+    const endTranslation = () => {
+      translationInProgress = false
+    }
+    this.socket = CarService.subscribe(car => {
+      if (!car.id || translationInProgress || !this.isPageShowing) {
+        return
+      }
+      const marker = markersByCarID.get(car.id)
+      if (!marker) {
+        // Insert new car
+        const newMarker: Marker = {
+          id: this.data.markers.length,
+          iconPath: car.car?.driver?.avatarUrl || defaultAvatar,
+          latitude: car.car?.position?.latitude || initialLat,
+          longitude: car.car?.position?.longitude || initialLng,
+          height: 20,
+          width: 20,
+        }
+        markersByCarID.set(car.id, newMarker)
+        this.data.markers.push(newMarker)
+        translationInProgress = true
+        this.setData({
+          markers: this.data.markers,
+        }, endTranslation)
+        return
+      }
+
+      const newAvatar = car.car?.driver?.avatarUrl || defaultAvatar
+      const newLat = car.car?.position?.latitude || initialLat
+      const newLng = car.car?.position?.longitude || initialLng
+      if (marker.iconPath !== newAvatar) {
+        // Change iconPath and possibly position
+        marker.iconPath = newAvatar
+        marker.latitude = newLat
+        marker.longitude = newLng
+        translationInProgress = true
+        this.setData({
+          markers: this.data.markers,
+        }, endTranslation)
+        return
+      }
+
+      if (marker.latitude !== newLat || marker.longitude !== newLng) {
+        // Move marker
+        translationInProgress = false
+        map.translateMarker({
+          markerId: marker.id,
+          destination: {
+            latitude: newLat,
+            longitude: newLng,
+          },
+          autoRotate: false,
+          rotate: 0,
+          duration: 90,
+          animationEnd: endTranslation,
+        })
+      }
     })
   },
 
@@ -128,7 +193,7 @@ Page({
       success: async () => {
         // TODO: 从二维码中获取car_id
         // 模拟已经获得car_id
-        const car_id = '637b858f53b72c2325dae4b3'
+        const car_id = '63933ba46ef7cc1ca1222d5e'
 
         // 指示register页面接下来跳转到lock页面
         const lockURL = routing.lock({
@@ -173,11 +238,6 @@ Page({
   },
 
   onLoad() {
-    let msgReceived = 0
-    this.socket = CarService.subscribe(msg => {
-      msgReceived++
-      console.log(msg)
-    })
   },
 
   onShow() {
@@ -190,9 +250,23 @@ Page({
         avatarURL: userInfo?.avatarUrl || '',
       })
     }
+    if (!this.socket) {
+      this.setData({
+        markers: [],
+      }, () => {
+        this.setupCarPosUpdater()
+      })
+    }
   },
 
   onHide() {
     this.isPageShowing = false
+    if (this.socket) {
+      this.socket.close({
+        success: () => {
+          this.socket = undefined
+        }
+      })
+    }
   },
 })
